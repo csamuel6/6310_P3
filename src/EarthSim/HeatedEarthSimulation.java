@@ -24,12 +24,22 @@ public class HeatedEarthSimulation implements Runnable
 	ArrayList<Long> calcTimeList=new ArrayList<Long>();
 	private final static Logger LOGGER = Logger.getLogger(HeatedEarthSimulation.class.getName()); 
 	
-	public HeatedEarthSimulation(int gs, int interval, BlockingQueue<Message> queue)
+
+	private double orbit = 0;
+	private double tilt = 23;
+	
+	public HeatedEarthSimulation(int gs, int interval, double orbit,  double tilt, BlockingQueue<Message> queue)
 	{
 		 this.queue=queue;
 		 this.gridSize=gs;
 		 timeInterval = interval;
-		 earthRepresentation = new EarthRepresentation(gs, interval);
+		 this.orbit = orbit;
+		 this.tilt = tilt;
+		 
+		 System.out.println("tilt " + tilt);
+		 
+		 
+		 earthRepresentation = new EarthRepresentation(gs, interval, orbit, tilt);
 		 gridcellsSurface1 = new GridCell[earthRepresentation.getRows()][earthRepresentation.getCols()];
 		 gridcellsSurface2 = new GridCell[earthRepresentation.getRows()][earthRepresentation.getCols()];
 		
@@ -41,7 +51,7 @@ public class HeatedEarthSimulation implements Runnable
 		this.paused=paused;
 	}
 	public void reset(){
-		earthRepresentation = new EarthRepresentation(gridSize, timeInterval);
+		earthRepresentation = new EarthRepresentation(gridSize, timeInterval, orbit, tilt);
 		gridcellsSurface1 = new GridCell[earthRepresentation.getRows()][earthRepresentation.getCols()];
 		gridcellsSurface2 = new GridCell[earthRepresentation.getRows()][earthRepresentation.getCols()];
 		timeOfDay=720;
@@ -150,9 +160,10 @@ public class HeatedEarthSimulation implements Runnable
 		this.diffuse(gridcellsSurface1, gridcellsSurface2);
 		calcTimeList.add((new Date()).getTime()-beforeCalc);
 		
+		
 		try {
 			Long before = (new Date()).getTime();
-			queue.put(new Message(prepareOutput(gridcellsSurface2), currentSunLocation));
+			queue.put(new Message(prepareOutput(gridcellsSurface2), currentSunLocation, earthRepresentation.getEarthsTilt()));
 			waitList.add((new Date()).getTime()-before);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -169,7 +180,7 @@ public class HeatedEarthSimulation implements Runnable
 		statsTimer++;
 		if(statsTimer == 1400)
 		{
-			LOGGER.log(Level.INFO, Analyzer.getMemoryStats());
+//			LOGGER.log(Level.INFO, Analyzer.getMemoryStats());
 			statsTimer = 0;
 		}	
 		
@@ -247,6 +258,20 @@ public class HeatedEarthSimulation implements Runnable
 	public void setTimeStep(Integer interval) {
 		 timeInterval = interval;
 		
+	}
+	
+	
+	public double getOrbit() {
+		return orbit;
+	}
+	public void setOrbit(double orbit) {
+		this.orbit = orbit;
+	}
+	public double getTilt() {
+		return tilt;
+	}
+	public void setTilt(double tilt) {
+		this.tilt = tilt;
 	}
 	
 }

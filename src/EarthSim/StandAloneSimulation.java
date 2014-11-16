@@ -8,7 +8,7 @@ public class StandAloneSimulation extends HeatedEarthSimulation {
 	
 	public StandAloneSimulation(int gs, int interval,
 			BlockingQueue<Message> queue) {
-		super(gs, interval, queue);
+		super(gs, interval, 0, 0 , queue);
 
 	}
 

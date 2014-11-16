@@ -14,7 +14,7 @@ public class Demo
 	
 	public static void main(String[] args) {
 	
-		 initializeLogging();
+	//	 initializeLogging();
 		 
 		int blen = 0;
 	    boolean  s, p, r, t, b; 

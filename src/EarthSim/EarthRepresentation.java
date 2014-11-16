@@ -11,6 +11,7 @@ public class EarthRepresentation {
 	private int timeInterval;
 	private int gs;
 	private int p; //proportion of equator used by one unit of gs
+	private double earthsTilt = 23.44;
 	
 	private double averageTemperature = 288;
 	
@@ -18,11 +19,12 @@ public class EarthRepresentation {
 	
 	double sunLocation = 0;
 	
-	public EarthRepresentation (int gridSpacing, int interval)
+	public EarthRepresentation (int gridSpacing, int interval, double orbit, double tilt)
 	{
 		this.gs= gridSpacing;
 		this.timeInterval = interval;
 		p = 360/gs;
+		this.earthsTilt = tilt;
 	}
 	public int getCols()
 	{
@@ -244,6 +246,12 @@ public class EarthRepresentation {
 		}
 		
 		return cellTemperature;
+	}
+	public double getEarthsTilt() {
+		return earthsTilt;
+	}
+	public void setEarthsTilt(double earthsTilt) {
+		this.earthsTilt = earthsTilt;
 	}
 
 }

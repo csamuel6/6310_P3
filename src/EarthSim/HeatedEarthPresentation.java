@@ -39,6 +39,7 @@ public class HeatedEarthPresentation extends JPanel {
 	private int lat = 180;
 	private boolean testing;
 	private Integer sunsLongitude = 0;
+	private double sunsLatitude = 63;
 	private JLabel time;
 	private static final long serialVersionUID = 1L;
 	private String path = "images/worldmap.png";
@@ -48,6 +49,8 @@ public class HeatedEarthPresentation extends JPanel {
 	private boolean hasPrintedStabilization=false;
 	ArrayList<Long> waitList=new ArrayList<Long>();
 	ArrayList<Long> displayTimeList=new ArrayList<Long>();
+	private double tilt = 0;
+	private double orbit = 0;
 	
 	
 	private final static Logger LOGGER = Logger.getLogger(HeatedEarthPresentation.class.getName()); 
@@ -70,6 +73,17 @@ public class HeatedEarthPresentation extends JPanel {
 	}
 	public void setTime(JLabel time){
 		this.time=time;
+	}
+	
+	public void setTilt(double tilt)
+	{
+		this.tilt = tilt;
+
+	}
+	
+	public void setOrbit(double orbit)
+	{
+		this.orbit = orbit;
 	}
 
 	public void setGridSize(int gridSize) {
@@ -141,13 +155,15 @@ public class HeatedEarthPresentation extends JPanel {
 					waitList.add((new Date()).getTime()-before);
 					grid = update.getGrid();
 					sunsLongitude = update.getSunsLongitude().intValue();
+					sunsLatitude = update.getSunsLatitude();
+					
 					this.repaint();
 					Thread.currentThread().sleep(displayRate);
 					
 					statsTimer++;
 					if(statsTimer == 1400)
 					{
-						LOGGER.log(Level.INFO, Analyzer.getMemoryStats());
+	//					LOGGER.log(Level.INFO, Analyzer.getMemoryStats());
 						statsTimer = 0;
 					}
 					
@@ -178,6 +194,7 @@ public class HeatedEarthPresentation extends JPanel {
 			waitList.add((new Date()).getTime()-before);
 			grid = update.getGrid();
 			sunsLongitude = update.getSunsLongitude().intValue();
+			sunsLatitude = update.getSunsLatitude();
 			this.repaint();
 
 		} catch (InterruptedException ex) {
@@ -242,7 +259,12 @@ public class HeatedEarthPresentation extends JPanel {
 			}
 			g2d.setColor(new Color(255, 255, 0, 100));
 			Long newLong = (long) ((((float) sunsLongitude + 180) / 360) * size.width);
-			g2d.fillOval(newLong.intValue()-50, (size.height/2)-50, 100, 100);
+			
+			Long newLat = (long) ((((float) sunsLatitude + 90) / 180) * size.height);
+			
+	//		System.out.println(newLat + " lewlat   " + sunsLatitude);
+			
+			g2d.fillOval(newLong.intValue()-50, newLat.intValue()-50, 100, 100);
 		}
 		if(time!=null && startTime!=null){
 		Long runningTime = ((new Date()).getTime() - startTime)/1000;

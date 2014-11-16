@@ -45,9 +45,12 @@ public class HeatedEarthGUI extends JFrame {
 
 	JButton runButton = new JButton("Run Simulation");
 	int textSize=30;
+	int textSize20=20;
 	JTextField gridSize = new JTextField();
 	JTextField simTimeStep = new JTextField();
 	JTextField displayRate = new JTextField();
+	JTextField tilt = new JTextField();
+	JTextField orbit = new JTextField();
 	final JButton start = new JButton();
 	JPanel rightPanel = new JPanel();
 	private JLabel time = new JLabel();
@@ -70,7 +73,7 @@ public class HeatedEarthGUI extends JFrame {
 		this.setTitle("Heated Earth Simulation");
 		this.setResizable(false);
 		this.setVisible(true);
-		sim = new HeatedEarthSimulation(Integer.valueOf(gridSize.getText()),Integer.valueOf(simTimeStep.getText()),queue);
+		sim = new HeatedEarthSimulation(Integer.valueOf(gridSize.getText()),Integer.valueOf(simTimeStep.getText()), Double.valueOf(orbit.getText()), Double.valueOf(tilt.getText()), queue);
 		//Set initiative 
 		if("S".equalsIgnoreCase(initiative)){
 			sim.setPresentation(display);
@@ -320,6 +323,91 @@ public class HeatedEarthGUI extends JFrame {
 			}
 		});
 		smallGrid.add(displayRate);
+		
+		
+		
+		JLabel fourthLabel = new JLabel("Tilt:");
+		fourthLabel.setFont(new Font("Arial", 0, textSize20));
+		smallGrid.add(fourthLabel);
+		tilt.setFont(new Font("Arial", 0, textSize20));
+		tilt.setText("23.44");
+		tilt.setToolTipText("Enter a value between -180 and 180.");
+		tilt.setInputVerifier(new InputVerifier()
+		{
+			@Override
+			public boolean verify(JComponent input)
+			{
+				String text = ((JTextField) input).getText();
+				try
+				{
+					Integer value = Integer.valueOf(text);    
+					if (value < -180 || value > 180)
+					{
+						tilt.setText("23.44");
+						display.setTilt(23.44);
+					} 
+					
+					try{
+						Integer.valueOf(tilt.getText());
+					}catch(NumberFormatException e){
+						tilt.setText("23.44");
+						display.setTilt(23.44);
+							
+					}
+					display.setTilt(Double.valueOf(tilt.getText()));
+					
+						return true;
+					
+				} catch (NumberFormatException e)
+				{
+					tilt.setText("");
+					return false;
+				}
+			}
+		});
+		smallGrid.add(tilt);
+		
+		JLabel fifthLabel = new JLabel("Orbit:");
+		fifthLabel.setFont(new Font("Arial", 0, textSize20));
+		smallGrid.add(fifthLabel);
+		orbit.setFont(new Font("Arial", 0, textSize20));
+		orbit.setText("0.0167");
+		orbit.setToolTipText("Enter a value between zero and 1.");
+		orbit.setInputVerifier(new InputVerifier()
+		{
+			@Override
+			public boolean verify(JComponent input)
+			{
+				String text = ((JTextField) input).getText();
+				try
+				{
+					Integer value = Integer.valueOf(text);    // to fix
+					if (value < 0 || value > 1)
+					{
+						orbit.setText("1");
+						display.setOrbit(0.0167);
+					} 
+					
+					try{
+						Integer.valueOf(orbit.getText());
+					}catch(NumberFormatException e){
+						orbit.setText("1");
+						display.setTilt(1);
+							
+					}
+					display.setOrbit(Double.valueOf(orbit.getText()));
+					
+						return true;
+					
+				} catch (NumberFormatException e)
+				{
+					orbit.setText("");
+					return false;
+				}
+			}
+		});
+		smallGrid.add(orbit);
+
 
 		runButton.setFont(new Font("Arial", 0, textSize));
 
@@ -337,6 +425,8 @@ public class HeatedEarthGUI extends JFrame {
 				display.setGridSize(Integer.valueOf(gridSize.getText()));
 				sim.setGridSize(Integer.valueOf(gridSize.getText()));
 				sim.setTimeStep(Integer.valueOf(simTimeStep.getText()));
+				sim.setTilt(Double.valueOf(tilt.getText()));
+				sim.setOrbit(Double.valueOf(orbit.getText()));
 				run();
 			}
 		});
