@@ -156,6 +156,7 @@ public class HeatedEarthSimulation implements Runnable
 
 		Long beforeCalc = (new Date()).getTime();
 		long currentSunLocation = SunRepresentation.sunLocation;
+		SunRepresentation.sunLatitude = earthRepresentation.getEarthsTilt();
 		
 		this.diffuse(gridcellsSurface1, gridcellsSurface2);
 		calcTimeList.add((new Date()).getTime()-beforeCalc);

@@ -5,6 +5,7 @@ public class SunRepresentation {
 	
 	
 	static long sunLocation = 0;
+	static double sunLatitude = 0;
 	static final double sunHeatOutput = 288; 
 	static final double sunHeatOutputPerHour = 4; 
 
@@ -27,6 +28,8 @@ public class SunRepresentation {
 				
 		longitudeDiffCosine = Math.cos(Math.toRadians(sunLocation - cell.getLongtitude()));
 		
+		double latitudeCosineDiff = Math.cos(Math.toRadians(sunLatitude - cell.getLatitude()));
+		
 		//if the cosine is negative, then the difference is greater than 90 degrees, 
 		//meaning cell is on dark side - so we will multiply sunHeat by zero
 		if (longitudeDiffCosine < 0)
@@ -34,7 +37,7 @@ public class SunRepresentation {
 		
 		double timeOffset = ((double)earthRepresentation.getTimeInterval() )/ 60.0 ;
 		
-		return sunHeatOutputPerHour * timeOffset * Math.cos(Math.toRadians(cell.getCenterLatitude() )) * longitudeDiffCosine;
+		return sunHeatOutputPerHour * timeOffset *  longitudeDiffCosine * latitudeCosineDiff;  // Math.cos(Math.toRadians(cell.getCenterLatitude() )) *
 		
 	}
 	

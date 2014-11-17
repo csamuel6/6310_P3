@@ -10,7 +10,7 @@ public class Message {
 	{
 		this.grid=grid;
 		this.sunsLongitude=sunsLongitude;
-		this.sunsLatitude = sunsLatitude * -1;
+		this.sunsLatitude = sunsLatitude;
 	}
 	
 	public double[][] getGrid() 

@@ -249,10 +249,19 @@ public class GridCell
 		
 		if ( southCellLocation > rows - 1 )
 		{
-			southCellLocation = 0;
+//			southCellLocation = 0;
+			
+			southCellLocation = cols - 1 - this.getyCoordinate();
+			this.setSouth(gridcellsSurface[this.getxCoordinate()][southCellLocation]);
+			
 		}
+		else 
+		{
 		
 		this.setSouth(gridcellsSurface[southCellLocation][this.getyCoordinate()]);
+		}
+		
+		
 	}
     
 
@@ -264,12 +273,18 @@ public class GridCell
 		
 		if ( cellLocation < 0 )
 		{
-			cellLocation = rows -1;
+		//	cellLocation = rows -1;
+			cellLocation = cols - 1 - this.getyCoordinate();
+			this.setNorth(gridcellsSurface[this.getxCoordinate()][cellLocation]);
 		}
-		
+		else
+		{
 //		System.out.println(cellLocation + " nc  " + this.getyCoordinate());
 		
 		this.setNorth(gridcellsSurface[cellLocation][this.getyCoordinate()]);
+		}
+		
+		
 	}
 	
 	public double getNeighborsAverageTemp()
