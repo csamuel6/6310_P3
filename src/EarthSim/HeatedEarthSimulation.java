@@ -3,28 +3,40 @@ package EarthSim;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
+@Entity
 public class HeatedEarthSimulation implements Runnable
 {
 	static GridCell[][] gridcellsSurface1;
 	static GridCell[][] gridcellsSurface2;
+	@Transient
 	private BlockingQueue<Message> queue;
 	static int timeInterval=0;
 	static int timeOfDay=720;
+	@Transient
 	private HeatedEarthPresentation presentation=null;
+	@Transient
 	static EarthRepresentation earthRepresentation;
-	GridCell gc;
+	//GridCell gc;
 	int gridSize;
 	private boolean running; //copied this from TestSimulator
 	private boolean paused;
 	private int statsTimer = 0;
+	@Transient
 	ArrayList<Long> waitList=new ArrayList<Long>();
+	@Transient
 	ArrayList<Long> calcTimeList=new ArrayList<Long>();
 	private final static Logger LOGGER = Logger.getLogger(HeatedEarthSimulation.class.getName()); 
 	
 
+	@Id
+	private int id;
 	private double orbit = 0;
 	private double tilt = 23;
 	
@@ -195,8 +207,6 @@ public class HeatedEarthSimulation implements Runnable
 		paused = false;
 		while(running){
 			while(!paused){
-			
-		
 				this.rotateEarth();
 				if(presentation!=null){
 					System.out.println("Simulation update");

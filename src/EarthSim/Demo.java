@@ -62,7 +62,8 @@ public class Demo
     	 initiative="S";
      else
     	 initiative="G";
-    	 
+    	
+
      HeatedEarthGUI gui = new HeatedEarthGUI(p, s, initiative, blen);
      gui.displayGui();
 	 }
