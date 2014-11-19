@@ -74,7 +74,6 @@ public class HeatedEarthPresentation extends JPanel {
 	public HeatedEarthPresentation(int gridSpacing,
 			BlockingQueue<Message> queue, Integer displayRate, boolean paused) {
 		super();
-		// CreateDbConnection();
 		this.queue = queue;
 		this.displayRate = displayRate;
 		this.gridSize = gridSpacing;
@@ -172,7 +171,6 @@ public class HeatedEarthPresentation extends JPanel {
 				try {
 					if (simulation != null) {
 						simulation.update();
-						this.storeSimulation(simulation);
 					}
 					Long before = (new Date()).getTime();
 					Message update = queue.take();
@@ -311,22 +309,5 @@ public class HeatedEarthPresentation extends JPanel {
 		return running;
 	}
 
-	private void storeSimulation(HeatedEarthSimulation simulation) {
-		if (simulation != null) {
-			try {
-				Configuration config = new Configuration();
-				config.configure();
-				StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder()
-						.applySettings(config.getProperties());
-				SessionFactory sessionFactory = new Configuration().configure()
-						.buildSessionFactory(registryBuilder.build());
-				Session session = sessionFactory.openSession();
-				session.save(simulation);
-				session.getTransaction().commit();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
 
 }
