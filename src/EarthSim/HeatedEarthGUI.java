@@ -52,7 +52,6 @@ public class HeatedEarthGUI extends JFrame {
 	final JButton start = new JButton();
 	JPanel rightPanel = new JPanel();
 	private JLabel time = new JLabel();
-	private DataManager dataManager = new DataManager();
 
 	public HeatedEarthGUI(boolean presentationThread,
 			boolean simulatorOwnThread, String initiative, Integer bufferSize) {
@@ -412,7 +411,6 @@ public class HeatedEarthGUI extends JFrame {
 					if ("S".equalsIgnoreCase(initiative)
 							|| "G".equalsIgnoreCase(initiative)) {
 						sim.run();
-
 					}
 
 				}
@@ -443,18 +441,5 @@ public class HeatedEarthGUI extends JFrame {
 				sim.run();
 			}
 		}
-		new Thread() {
-			public void run() {
-				Integer storeRate = Integer.valueOf(displayRate.getText());
-				try {
-					Thread.currentThread().sleep(storeRate);
-					dataManager.store(sim);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}.start();
 	}
-
 }

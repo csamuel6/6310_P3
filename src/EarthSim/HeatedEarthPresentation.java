@@ -65,9 +65,6 @@ public class HeatedEarthPresentation extends JPanel {
 	private double tilt = 0;
 	private double orbit = 0;
 
-	@Id
-	private int id;
-
 	private final static Logger LOGGER = Logger
 			.getLogger(HeatedEarthPresentation.class.getName());
 

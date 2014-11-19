@@ -1,7 +1,9 @@
 package EarthSim;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
@@ -12,49 +14,33 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-@Entity
-@Table(name = "SimulationInfo")
 public class HeatedEarthSimulation implements Runnable {
 	public HeatedEarthSimulation() {}
 
 	static GridCell[][] gridcellsSurface1;
 	static GridCell[][] gridcellsSurface2;
-	@Transient
+
 	private BlockingQueue<Message> queue;
-	@Transient
 	static int timeInterval = 0;
-	@Transient
 	static int timeOfDay = 720;
-	@Transient
 	private HeatedEarthPresentation presentation = null;
-	@Transient
+	private DataManager dataManager = new DataManager();
+	
 	static EarthRepresentation earthRepresentation;
 	// GridCell gc;
-	@Column(name = "gridSpacing")
 	int gridSize;
-	@Transient
 	private boolean running; // copied this from TestSimulator
-	@Transient
 	private boolean paused;
-	@Column(name = "timeStep")
 	private int statsTimer = 0;
-	@Transient
 	ArrayList<Long> waitList = new ArrayList<Long>();
-	@Transient
 	ArrayList<Long> calcTimeList = new ArrayList<Long>();
 	private final static Logger LOGGER = Logger
 			.getLogger(HeatedEarthSimulation.class.getName());
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-	@Transient
+	Calendar calendar;
 	private double orbit = 0;
-	@Transient
-	private double tilt = 23;
 
-	@Column(name = "name")
-	private String name = "";
+	private double tilt = 23;
+	SimulationStorage simulation;
 	
 	public HeatedEarthSimulation(int gs, int interval, double orbit,
 			double tilt, BlockingQueue<Message> queue) {
@@ -63,7 +49,8 @@ public class HeatedEarthSimulation implements Runnable {
 		timeInterval = interval;
 		this.orbit = orbit;
 		this.tilt = tilt;
-
+		calendar = Calendar.getInstance();
+		calendar.set(2014, Calendar.JANUARY, 4);
 		System.out.println("tilt " + tilt);
 
 		earthRepresentation = new EarthRepresentation(gs, interval, orbit, tilt);
@@ -213,19 +200,49 @@ public class HeatedEarthSimulation implements Runnable {
 
 		running = true;
 		paused = false;
+		
+		simulation = new SimulationStorage();
+		simulation.setAxialTilt(this.getTilt());
+		simulation.setEccentricity(this.getOrbit());
+		simulation.setGridSpacing(this.gridSize);
+		simulation.setName("");
+		simulation.setCreateDate(calendar.getTime());
+		simulation.setTime(timeInterval);
+		
+		dataManager.store(simulation);
+		
 		while (running) {
 			while (!paused) {
-				this.rotateEarth();
+				this.rotateEarth();			
+				
+				dataManager.store(createGridStorageCells(gridcellsSurface1, simulation));
+
 				if (presentation != null) {
 					System.out.println("Simulation update");
 					presentation.update();
 				}
+			}
+		}
+	}
 
+	private List<GridCellStorage> createGridStorageCells(GridCell[][] grid, SimulationStorage methodSimulation) {
+		//GridCellStorage[][] gridCellList = new GridCellStorage[earthRepresentation.getRows()][earthRepresentation.getCols()];
+		List<GridCellStorage> gridCell = new ArrayList<GridCellStorage>();
+		for (int i = 0; i < earthRepresentation.getRows(); i++) {
+			for (int j = 0; j < earthRepresentation.getCols(); j++) {
+				GridCellStorage store = new GridCellStorage();
+				store.setTemperature(grid[i][j].getTemp());
+				store.setLongitude(grid[i][j].getLongtitude());
+				store.setLatitude(grid[i][j].getLatitude());
+				store.setTime(calendar.getTime());
+				store.setStorage(methodSimulation);
+				gridCell.add(store);
 			}
 		}
 
+		return gridCell;
 	}
-
+	
 	private double[][] prepareOutput(GridCell[][] grid) {
 
 		double[][] gridOutput = new double[earthRepresentation.getRows()][earthRepresentation
@@ -271,7 +288,7 @@ public class HeatedEarthSimulation implements Runnable {
 		timeInterval = interval;
 
 	}
-	@Column(name="eccentricity")
+	
 	public double getOrbit() {
 		return orbit;
 	}
@@ -280,7 +297,6 @@ public class HeatedEarthSimulation implements Runnable {
 		this.orbit = orbit;
 	}
 	
-	@Column(name="axialTilt")
 	public double getTilt() {
 		return tilt;
 	}
