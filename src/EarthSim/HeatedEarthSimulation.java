@@ -214,9 +214,9 @@ public class HeatedEarthSimulation implements Runnable {
 		while (running) {
 			while (!paused) {
 				this.rotateEarth();			
-				
-				dataManager.store(createGridStorageCells(gridcellsSurface1, simulation));
 
+				dataManager.store(createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime()));
+				calendar.add(Calendar.MINUTE, timeInterval);
 				if (presentation != null) {
 					System.out.println("Simulation update");
 					presentation.update();
@@ -225,18 +225,16 @@ public class HeatedEarthSimulation implements Runnable {
 		}
 	}
 
-	private List<GridCellStorage> createGridStorageCells(GridCell[][] grid, SimulationStorage methodSimulation) {
+	private List<GridCellStorage> createGridStorageCells(GridCell[][] grid, SimulationStorage methodSimulation, Date currentTime) {
 		//GridCellStorage[][] gridCellList = new GridCellStorage[earthRepresentation.getRows()][earthRepresentation.getCols()];
 		List<GridCellStorage> gridCell = new ArrayList<GridCellStorage>();
 		for (int i = 0; i < earthRepresentation.getRows(); i++) {
 			for (int j = 0; j < earthRepresentation.getCols(); j++) {
-				GridCellStorage store = new GridCellStorage();
-				store.setTemperature(grid[i][j].getTemp());
-				store.setLongitude(grid[i][j].getLongtitude());
-				store.setLatitude(grid[i][j].getLatitude());
-				store.setTime(calendar.getTime());
-				store.setStorage(methodSimulation);
-				gridCell.add(store);
+				GridCellStorage gricCellStorage = new GridCellStorage(grid[i][j]);
+				
+				gricCellStorage.setTime(currentTime);
+				gricCellStorage.setStorage(methodSimulation);
+				gridCell.add(gricCellStorage);
 			}
 		}
 
