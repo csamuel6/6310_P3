@@ -13,7 +13,7 @@
 		
 		<property name="show_sql">true</property>
 		
-		<mapping class = "EarthSim.SimulationStorage"/>
-		<mapping class = "EarthSim.GridCellStorage" />
+		<mapping class = "EarthSim.persistance.SimulationStorage"/>
+		<mapping class = "EarthSim.persistance.GridCellStorage" />
 	</session-factory>
 </hibernate-configuration>

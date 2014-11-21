@@ -29,7 +29,7 @@ public class HeatedEarthSimulation implements Runnable {
 	static int timeInterval = 0;
 	static int timeOfDay = 720;
 	private HeatedEarthPresentation presentation = null;
-//	private DataManager dataManager = new DataManager();
+	private DataManager dataManager = new DataManager();
 	
 	protected static EarthRepresentation earthRepresentation;
 	// GridCell gc;
@@ -214,13 +214,13 @@ public class HeatedEarthSimulation implements Runnable {
 		simulation.setCreateDate(calendar.getTime());
 		simulation.setTime(timeInterval);
 		
-//		dataManager.store(simulation);
+		dataManager.store(simulation);
 		
 		while (running) {
 			while (!paused) {
 				this.rotateEarth();			
 
-//				dataManager.store(createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime()));
+				dataManager.store(createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime()));
 				calendar.add(Calendar.MINUTE, timeInterval);
 				if (presentation != null) {
 					System.out.println("Simulation update");
