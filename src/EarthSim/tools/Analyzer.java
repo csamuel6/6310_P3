@@ -1,4 +1,4 @@
-package EarthSim;
+package EarthSim.tools;
 
 
 
@@ -6,6 +6,8 @@ package EarthSim;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import EarthSim.main.Demo;
 
 	public class Analyzer {
 			

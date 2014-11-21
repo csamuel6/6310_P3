@@ -1,4 +1,4 @@
-package EarthSim;
+package EarthSim.main;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,24 +9,29 @@ import java.util.logging.Logger;
 
 import javax.annotation.Generated;
 import javax.persistence.*;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import EarthSim.persistance.DataManager;
+import EarthSim.persistance.GridCellStorage;
+import EarthSim.persistance.SimulationStorage;
+
 public class HeatedEarthSimulation implements Runnable {
 	public HeatedEarthSimulation() {}
 
-	static GridCell[][] gridcellsSurface1;
-	static GridCell[][] gridcellsSurface2;
+	protected static GridCell[][] gridcellsSurface1;
+	protected static GridCell[][] gridcellsSurface2;
 
 	private BlockingQueue<Message> queue;
 	static int timeInterval = 0;
 	static int timeOfDay = 720;
 	private HeatedEarthPresentation presentation = null;
-	private DataManager dataManager = new DataManager();
+//	private DataManager dataManager = new DataManager();
 	
-	static EarthRepresentation earthRepresentation;
+	protected static EarthRepresentation earthRepresentation;
 	// GridCell gc;
 	int gridSize;
 	private boolean running; // copied this from TestSimulator
@@ -209,13 +214,13 @@ public class HeatedEarthSimulation implements Runnable {
 		simulation.setCreateDate(calendar.getTime());
 		simulation.setTime(timeInterval);
 		
-		dataManager.store(simulation);
+//		dataManager.store(simulation);
 		
 		while (running) {
 			while (!paused) {
 				this.rotateEarth();			
 
-				dataManager.store(createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime()));
+//				dataManager.store(createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime()));
 				calendar.add(Calendar.MINUTE, timeInterval);
 				if (presentation != null) {
 					System.out.println("Simulation update");

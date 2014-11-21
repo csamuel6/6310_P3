@@ -1,4 +1,4 @@
-package EarthSim;
+package EarthSim.main;
 
 public class EarthRepresentation {
 	

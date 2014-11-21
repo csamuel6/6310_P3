@@ -1,4 +1,4 @@
-package EarthSim;
+package EarthSim.persistance;
 
 import java.util.Date;
 
@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import EarthSim.main.GridCell;
 
 @Entity
 @IdClass(GridCellStoragePK.class)
