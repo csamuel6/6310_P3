@@ -64,7 +64,9 @@ public class HeatedEarthPresentation extends JPanel {
 	ArrayList<Long> displayTimeList = new ArrayList<Long>();
 	private double tilt = 0;
 	private double orbit = 0;
-
+	private int simulationLength = 0;
+	private String simulationName = "";
+	
 	private final static Logger LOGGER = Logger
 			.getLogger(HeatedEarthPresentation.class.getName());
 
@@ -304,6 +306,22 @@ public class HeatedEarthPresentation extends JPanel {
 
 	public boolean getRunning() {
 		return running;
+	}
+
+	public int getSimulationLength() {
+		return simulationLength;
+	}
+
+	public void setSimulationLength(int simulationLength) {
+		this.simulationLength = simulationLength;
+	}
+
+	public String getSimulationName() {
+		return simulationName;
+	}
+
+	public void setSimulationName(String simulationName) {
+		this.simulationName = simulationName;
 	}
 
 

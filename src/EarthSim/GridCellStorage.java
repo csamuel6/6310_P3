@@ -2,6 +2,7 @@ package EarthSim;
 
 import java.util.Date;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
+@Embeddable
 @IdClass(GridCellStoragePK.class)
 @Table(name = "CellData")
 public class GridCellStorage {

@@ -1,16 +1,16 @@
 package EarthSim;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -26,10 +26,21 @@ public class SimulationStorage {
 	private double axialTilt;
 	private double eccentricity;
 	private int timeStep;
+	private int simulationLength;
 	private Date creationDate; 
+	@Embedded
+	@ElementCollection
+	private List<GridCellStorage> gridCells = new ArrayList<GridCellStorage>();
 	
 	public SimulationStorage() {}
 	
+	public SimulationStorage(HeatedEarthSimulation simulation) {
+		name = simulation.getName();
+		axialTilt = simulation.getTilt();
+		eccentricity = simulation.getOrbit();
+		gridSpacing = simulation.gridSize;
+		simulationLength = simulation.getLength();
+	}
 	public Date getCreateDate() {
 		return creationDate;
 	}
@@ -50,14 +61,6 @@ public class SimulationStorage {
 	public void setGridSpacing(int gridSize) {
 		this.gridSpacing = gridSize;
 	}
-
-//	public static List<GridCellStorage> getGrid() {
-//		return grid;
-//	}
-//	
-//	public static void setGrid(List<GridCellStorage> grid) {
-//		SimulationStorage.grid = grid;
-//	}
 	
 	public double getAxialTilt() {
 		return axialTilt;
@@ -76,6 +79,22 @@ public class SimulationStorage {
 	}
 	public void setTime(int date) {
 		this.timeStep = date;
+	}
+
+	public int getSimulationLength() {
+		return simulationLength;
+	}
+
+	public void setSimulationLength(int simulationLength) {
+		this.simulationLength = simulationLength;
+	}
+
+	public List<GridCellStorage> getGridCells() {
+		return gridCells;
+	}
+
+	public void setGridCells(List<GridCellStorage> gridCells) {
+		this.gridCells = gridCells;
 	}
 
 }
