@@ -1,6 +1,10 @@
-package EarthSim;
+package EarthSim.tools;
 
 import java.util.concurrent.BlockingQueue;
+
+import EarthSim.main.GridCell;
+import EarthSim.main.HeatedEarthSimulation;
+import EarthSim.main.Message;
 
 public class StandAloneSimulation extends HeatedEarthSimulation {
 

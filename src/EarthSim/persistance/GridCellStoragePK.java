@@ -1,4 +1,4 @@
-package EarthSim;
+package EarthSim.persistance;
 
 import java.io.Serializable;
 import java.util.Date;

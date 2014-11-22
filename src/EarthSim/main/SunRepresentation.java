@@ -1,11 +1,11 @@
-package EarthSim;
+package EarthSim.main;
 
 public class SunRepresentation {
 	
 	
 	
-	static long sunLocation = 0;
-	static double sunLatitude = 0;
+	public static long sunLocation = 0;
+	public static double sunLatitude = 0;
 	static final double sunHeatOutput = 288; 
 	static final double sunHeatOutputPerHour = 4; 
 

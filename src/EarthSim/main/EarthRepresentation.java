@@ -1,4 +1,4 @@
-package EarthSim;
+package EarthSim.main;
 
 public class EarthRepresentation {
 	
@@ -18,6 +18,8 @@ public class EarthRepresentation {
 	//add method to get grid proportion to the equator
 	
 	double sunLocation = 0;
+	private double x;
+	private double y;
 	
 	public EarthRepresentation (int gridSpacing, int interval, double orbit, double tilt)
 	{
@@ -254,4 +256,88 @@ public class EarthRepresentation {
 		this.earthsTilt = earthsTilt;
 	}
 
+	/*
+	 * Orbital Methods and Constants
+	 * 
+	 * Defaults:
+	 * Eccentricity = 0.0167 (Earth eccentricity)
+	 * 
+	 * Solving for distance from the sun
+	 * 
+	 * Perihelion - when planet is at closest orbital position to the sun
+	 * 
+	 */
+	
+	/*
+	 * Process to find orbital position:
+	 * Find time since last perihelion (0,T] where T is the period of the planet
+	 * Need to calculate mean anomaly, eccentric anomaly, and the true anomaly
+	 */
+	
+	public double meanAnomaly(double currentTime, double period){
+		return 2 * Math.PI * (currentTime/period);
+	}
+	
+	/*
+	 * Calculate Eccentricy
+	 * Takes in two doubles:
+	 * Double a: The length of the semi-major axis
+	 * Double b: The length of the semi-minor axis
+	 */
+	
+	public double calculateEccentricity(double a, double b){
+		return (Math.sqrt(Math.abs(Math.pow(a, 2) - Math.pow(b, 2))) / Math.max(a, b));
+	}
+	
+	
+	public double eccentricAnomaly(double meanAnomaly, double eccentricity, int accuracy){
+		int maxIteration = 30, iteration = 0;
+		double delta = Math.pow(10, -accuracy);
+		
+		double E, F;
+		meanAnomaly = meanAnomaly/(2*Math.PI);
+		meanAnomaly = 2.0 * Math.PI * (meanAnomaly-Math.floor(meanAnomaly));
+				
+		if(eccentricity < 0.8)
+			E = meanAnomaly;
+		else
+			E = Math.PI;
+		
+		F = E - eccentricity * Math.sin(meanAnomaly) - meanAnomaly;
+		
+		while((Math.abs(F) > delta) && (iteration < maxIteration)){
+			E = E - F / (1.0 - eccentricity * Math.cos(E));
+			F = E - eccentricity * Math.sin(E) - meanAnomaly;
+			iteration++;
+		}
+		
+		return Math.round(E * Math.pow(10, accuracy))/Math.pow(10, accuracy);
+	}
+	
+	public double trueAnomaly(double eccentricity, double eAnomaly, int accuracy){
+		double S = Math.sin(eAnomaly);
+		double C = Math.cos(eAnomaly);
+		
+		double fak = Math.sqrt(1.0-eccentricity*eccentricity);
+		double phi = Math.atan2(fak * S, C - eccentricity);
+		return Math.round(phi * Math.pow(10, accuracy)) / Math.pow(10, accuracy);
+	}
+	
+	/*
+	 * calculatePosition
+	 * Finds x and y position
+	 */
+	public void calculatePosition(double semiMajorAxis, double eccentricity, double eccAnomaly){
+		double C = Math.cos(eccAnomaly);
+		double S = Math.sin(eccAnomaly);
+		
+		this.x = semiMajorAxis * (C - eccentricity);
+		this.y = semiMajorAxis * Math.sqrt(1.0 - eccentricity * eccentricity) * S;
+	}
+	
+
+	public double calculateRadius(double semiMajorAxis, double eccentricity, double trueAnomaly){
+		return semiMajorAxis * ((1 - Math.pow(eccentricity,2)) / (1 + eccentricity * Math.cos(trueAnomaly)));
+	}
+	
 }
