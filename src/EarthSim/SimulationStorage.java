@@ -97,4 +97,12 @@ public class SimulationStorage {
 		this.gridCells = gridCells;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	private void setId(int id) {
+		this.id = id;
+	}
+
 }

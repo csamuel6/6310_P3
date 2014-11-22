@@ -202,21 +202,38 @@ public class HeatedEarthSimulation implements Runnable {
 
 		running = true;
 		paused = false;
+		Date tempDate = calendar.getTime();
 		
-//		QueryParameters queryParameters = new QueryParameters();
-//		queryParameters.setGridSpacing(this.gridSize);
-//		queryParameters.setOrbit(this.orbit);
-//		queryParameters.setLowerXCoordinate(0);
-//		queryParameters.setUpperXCoordinate(0);
-//		queryParameters.setLowerYCoordinate(0);
-//		queryParameters.setUpperYCoordinate(0);
-//		queryParameters.setStartDate(this);
-//		queryParameters.setEndDate(this);
-//		dataManager.readSimulation(queryParameters);
+		QueryParameters queryParameters = new QueryParameters();
+		queryParameters.setName(this.Name);
+		queryParameters.setGridSpacing(this.gridSize);
+		queryParameters.setTilt(this.tilt);
+		queryParameters.setOrbit(this.orbit);
+		queryParameters.setTimeStep(this.timeInterval);
+		queryParameters.setLowerLatitude(-10);
+		queryParameters.setUpperLatitude(10);
+		queryParameters.setLowerLongitude(-60);
+		queryParameters.setUpperLongitude(60);
 		
-		simulation = new SimulationStorage(this);
-		simulation.setCreateDate(calendar.getTime());
-		simulation.setTime(timeInterval);
+		calendar.set(2014, 0, 4, 19, 40);
+		Date startDate = calendar.getTime();
+		queryParameters.setStartDate(startDate);
+		
+		calendar.set(2014, 0, 4, 19, 44);
+		Date endDate = calendar.getTime();
+		queryParameters.setEndDate(endDate);
+		
+		calendar.setTime(tempDate);
+		List<SimulationStorage> simulationList = dataManager.readSimulation(queryParameters);
+		
+		// Just a test to get the right storage structure.
+		simulation = simulationList.get(0);
+		
+		if (simulation == null) {
+			simulation = new SimulationStorage(this);		
+			simulation.setCreateDate(calendar.getTime());
+			simulation.setTime(timeInterval);
+		}
 		
 		dataManager.setSimulation(simulation);
 		dataManager.storeSimulation();

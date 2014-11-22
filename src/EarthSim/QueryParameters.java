@@ -8,39 +8,39 @@ public class QueryParameters {
 	private double tilt = 0;
 	private int timeStep,length,gridSpacing = 0;
 	private Date startDate, endDate; 
-	private int lowerXCoordinate, upperXCoordinate, lowerYCoordinate, upperYCoordinate = 0;
+	private int lowerLatitude, upperLatitude, lowerLongitude, upperLongitude = 0;
 
 	
-	public int getLowerXCoordinate() {
-		return lowerXCoordinate;
+	public int getLowerLatitude() {
+		return lowerLatitude;
 	}
 
-	public void setLowerXCoordinate(int lowerXCoordinate) {
-		this.lowerXCoordinate = lowerXCoordinate;
+	public void setLowerLatitude(int latitude) {
+		this.lowerLatitude = latitude;
 	}
 
-	public int getUpperXCoordinate() {
-		return upperXCoordinate;
+	public int getUpperLatitude() {
+		return upperLatitude;
 	}
 
-	public void setUpperXCoordinate(int upperXCoordinate) {
-		this.upperXCoordinate = upperXCoordinate;
+	public void setUpperLatitude(int latitude) {
+		this.upperLatitude = latitude;
 	}
 
-	public int getLowerYCoordinate() {
-		return lowerYCoordinate;
+	public int getLowerLongitude() {
+		return lowerLongitude;
 	}
 
-	public void setLowerYCoordinate(int lowerYCoordinate) {
-		this.lowerYCoordinate = lowerYCoordinate;
+	public void setLowerLongitude(int longitude) {
+		this.lowerLongitude = longitude;
 	}
 
-	public int getUpperYCoordinate() {
-		return upperYCoordinate;
+	public int getUpperLongitude() {
+		return upperLongitude;
 	}
 
-	public void setUpperYCoordinate(int upperYCoordinate) {
-		this.upperYCoordinate = upperYCoordinate;
+	public void setUpperLongitude(int longitude) {
+		this.upperLongitude = longitude;
 	}
 
 	public Date getStartDate() {

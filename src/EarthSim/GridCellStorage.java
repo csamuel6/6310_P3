@@ -12,8 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Embeddable
 @IdClass(GridCellStoragePK.class)
+@Embeddable
 @Table(name = "CellData")
 public class GridCellStorage {
 	
@@ -76,22 +76,9 @@ public class GridCellStorage {
 		return Time;
 	}
 
-	public void setTime(Date date) {
-		this.Time = date;
+	public void setTime(Date time) {
+		this.Time = time;
 	}
-
-	@Id
-	@ManyToOne
-	@JoinTable(name = "CellData")
-	@JoinColumn(name="SimulationInfo_id")
-    public SimulationStorage getStorage() {
-		return storage;
-	}
-
-	public void setStorage(SimulationStorage storage) {
-		this.storage = storage;
-	}
-
 	public int getxCoordinate() {
 		return xCoordinate;
 	}
@@ -106,5 +93,18 @@ public class GridCellStorage {
 
 	public void setyCoordinate(int yCoordinate) {
 		this.yCoordinate = yCoordinate;
+		
+	}
+	
+	@Id
+	@ManyToOne
+	@JoinTable(name = "CellData")
+	@JoinColumn(name="SimulationInfo_id")
+	public SimulationStorage getStorage() {
+		return storage;
+	}
+
+	public void setStorage(SimulationStorage storage) {
+		this.storage = storage;
 	}
 }

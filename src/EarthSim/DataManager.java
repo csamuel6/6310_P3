@@ -29,12 +29,14 @@ public class DataManager {
 	private void storeCells(List<GridCellStorage> gridCell) {
 		if (gridCell != null) {
 			try {
+				session = sessionFactory.openSession();
 				Transaction tx = session.beginTransaction();
 				for (int i = 0; i < gridCell.size(); i++) {
 					session.save(gridCell.get(i));
 				}
 				tx.commit();
 				session.clear();
+				session = sessionFactory.openSession();
 			} catch (Exception ex) {
 				session.clear();
 				session.close();
@@ -62,51 +64,66 @@ public class DataManager {
 		}
 	}
 
-	public SimulationStorage readSimulation(QueryParameters queryParameters) {
-		SimulationStorage sim = null;
+	public List<SimulationStorage> readSimulation(QueryParameters queryParameters) {
+		List<SimulationStorage> simList = null;
 		if (queryParameters != null) {
-			String name = "";
-			String sql = "FROM SimulationInfo sim WHERE sim.name = :simulationName";
-			sql += "and sim.eccentricity = " + queryParameters.getOrbit();
-			double tilt = 0;
-			sql += "and sim.axialTilt = " + tilt;
-			int gridSpacing = 0;
-			sql += "and sim.gridSpacing = " + gridSpacing;
-			int timeStep = 0;
-			sql += "and sim.timeStep = " + timeStep;
-//			int length = 0;
-//			sql += "and sim.simulationLength = " + length;
+			String sql = "FROM SimulationStorage AS sim";
+			sql += " WHERE sim.eccentricity = " + queryParameters.getOrbit();
+			sql += " AND sim.axialTilt = " + queryParameters.getTilt();
+			sql += " AND sim.gridSpacing = " + queryParameters.getGridSpacing();
+			sql += " AND sim.timeStep = " + queryParameters.getTimeStep();
+			sql += " and sim.name = :simulationName";
+			
 			Query query = session.createQuery(sql);
-			query.setParameter("simulationName", name);
+			query.setParameter("simulationName", queryParameters.name);
 			List list = query.list();
 
-			sim = (SimulationStorage) list;
-			sim.setGridCells(this.readGridCells(queryParameters));
+			if (list.isEmpty()) {
+				return null;
+			}
+			simList = new ArrayList<SimulationStorage>();
+			for (Object obj : list) {
+				SimulationStorage sim = (SimulationStorage) obj;
+				sim.setGridCells(this.readGridCells(queryParameters, sim));
+				simList.add(sim);
+			}
 		}
-		return sim;
+		return simList;
 	}
 
-	private List<GridCellStorage> readGridCells(QueryParameters queryParameters) {
+	private List<GridCellStorage> readGridCells(QueryParameters queryParameters, SimulationStorage methodSimulation) {
 		List<GridCellStorage> gcStorage = null;
 		if (queryParameters != null) {
 			gcStorage = new ArrayList<GridCellStorage>();
-			String sql = "FROM CellData GridCell WHERE GridCell.Time >= :StartDate and GridCell.Time <=:EndDate";
-			sql += "and GridCell.xCoordinate >= "
-					+ queryParameters.getLowerXCoordinate()
-					+ "and GridCell.xCoordinate <= "
-					+ queryParameters.getUpperXCoordinate();
+			String sql = "FROM GridCellStorage GridCell";
+			sql += " WHERE GridCell.latitude >= "
+					+ queryParameters.getLowerLatitude()
+					+ " AND GridCell.latitude <= "
+					+ queryParameters.getUpperLatitude();
 
-			sql += "and GridCell.yCoordinate >= "
-					+ queryParameters.getLowerYCoordinate()
-					+ " and GridCell.yCoordinate <= "
-					+ queryParameters.getUpperYCoordinate();
+			sql += " AND GridCell.longitude >= "
+					+ queryParameters.getLowerLongitude()
+					+ " AND GridCell.longitude <= "
+					+ queryParameters.getUpperLongitude();
+			sql += " AND GridCell.storage.id = " + methodSimulation.getId();
+			sql += " AND GridCell.time >= :StartDate AND GridCell.time <=:EndDate";
 			Query query = session.createQuery(sql);
 			query.setParameter("StartDate", queryParameters.getStartDate());
 			query.setParameter("EndDate", queryParameters.getEndDate());
+			
+			List list = query.list();
+			if (list.isEmpty()) {
+				return null;
+			}
+			gcStorage = new ArrayList<GridCellStorage>();
+			for (Object obj : list) {
+				GridCellStorage gridCellStorage = (GridCellStorage) obj;
+				gcStorage.add(gridCellStorage);
+			}
 		}
 		return gcStorage;
 	}
-
+	
 	public SimulationStorage getSimulation() {
 		return _simulation;
 	}

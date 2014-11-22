@@ -11,7 +11,7 @@
 		
 		<property name="dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
 		
-		<property name="show_sql">true</property>
+<!-- 		<property name="show_sql">true</property> -->
 
 		<mapping class = "EarthSim.SimulationStorage"/>
 		<mapping class = "EarthSim.GridCellStorage" />

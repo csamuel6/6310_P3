@@ -63,7 +63,7 @@ public class HeatedEarthGUI extends JFrame {
 		this.queue = new ArrayBlockingQueue<Message>(bufferSize);
 		this.initiative = initiative;
 		display = new HeatedEarthPresentation(0, queue, 1, paused);
-
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	public void displayGui() {
@@ -75,6 +75,7 @@ public class HeatedEarthGUI extends JFrame {
 		sim = new HeatedEarthSimulation(Integer.valueOf(gridSize.getText()),
 				Integer.valueOf(simTimeStep.getText()), Double.valueOf(orbit
 						.getText()), Double.valueOf(tilt.getText()), queue);
+		runButton.setEnabled(true);
 		// Set initiative
 		if ("S".equalsIgnoreCase(initiative)) {
 			sim.setPresentation(display);
@@ -430,7 +431,7 @@ public class HeatedEarthGUI extends JFrame {
 		smallGrid.add(simulationName);
 
 		runButton.setFont(new Font("Arial", 0, textSize));
-
+		runButton.setEnabled(false);
 		runButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
