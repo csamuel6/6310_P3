@@ -49,6 +49,8 @@ public class HeatedEarthGUI extends JFrame {
 	JTextField displayRate = new JTextField();
 	JTextField tilt = new JTextField();
 	JTextField orbit = new JTextField();
+	JTextField simulationName = new JTextField();
+	JTextField simulationLength = new JTextField();
 	final JButton start = new JButton();
 	JPanel rightPanel = new JPanel();
 	private JLabel time = new JLabel();
@@ -73,6 +75,7 @@ public class HeatedEarthGUI extends JFrame {
 		sim = new HeatedEarthSimulation(Integer.valueOf(gridSize.getText()),
 				Integer.valueOf(simTimeStep.getText()), Double.valueOf(orbit
 						.getText()), Double.valueOf(tilt.getText()), queue);
+		runButton.setEnabled(true);
 		// Set initiative
 		if ("S".equalsIgnoreCase(initiative)) {
 			sim.setPresentation(display);
@@ -371,8 +374,65 @@ public class HeatedEarthGUI extends JFrame {
 		});
 		smallGrid.add(orbit);
 
-		runButton.setFont(new Font("Arial", 0, textSize));
 
+		JLabel sixthLabel = new JLabel("Length (months):");
+		sixthLabel.setFont(new Font("Arial", 0, textSize20));
+		smallGrid.add(sixthLabel);
+		simulationLength.setFont(new Font("Arial", 0, textSize20));
+		simulationLength.setText("12");
+		simulationLength.setToolTipText("Enter a value between 1 and 1200.");
+		simulationLength.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String text = ((JTextField) input).getText();
+				try {
+					Integer value = Integer.valueOf(text); // to fix
+					if (value < 1 || value > 1200) {
+						simulationLength.setText("12");
+						display.setSimulationLength(12);
+					}
+
+					try {
+						Integer.valueOf(simulationLength.getText());
+					} catch (NumberFormatException e) {
+						simulationLength.setText("12");
+						display.setSimulationLength(12);
+					}
+					display.setSimulationLength(Integer
+							.valueOf(simulationLength.getText()));
+
+					return true;
+
+				} catch (NumberFormatException e) {
+					simulationLength.setText("");
+					return false;
+				}
+			}
+		});
+		smallGrid.add(simulationLength);
+
+		JLabel name = new JLabel("Name:");
+		name.setFont(new Font("Arial", 0, textSize20));
+		smallGrid.add(name);
+		simulationName.setFont(new Font("Arial", 0, textSize20));
+		simulationName.setToolTipText("Provide a Simulation Name");
+		simulationName.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String text = ((JTextField) input).getText();
+				try {
+					display.setSimulationName(text);
+					return true;
+				} catch (NumberFormatException e) {
+					simulationName.setText("");
+					return false;
+				}
+			}
+		});
+		smallGrid.add(simulationName);
+		
+		runButton.setFont(new Font("Arial", 0, textSize));
+		runButton.setEnabled(false);
 		runButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -386,6 +446,8 @@ public class HeatedEarthGUI extends JFrame {
 				sim.setTimeStep(Integer.valueOf(simTimeStep.getText()));
 				sim.setTilt(Double.valueOf(tilt.getText()));
 				sim.setOrbit(Double.valueOf(orbit.getText()));
+				sim.setLength(Integer.valueOf(simulationLength.getText()));
+				sim.setName(simulationName.getText());
 				run();
 			}
 		});

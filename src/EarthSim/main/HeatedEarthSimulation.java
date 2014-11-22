@@ -17,6 +17,7 @@ import org.hibernate.cfg.Configuration;
 
 import EarthSim.persistance.DataManager;
 import EarthSim.persistance.GridCellStorage;
+import EarthSim.persistance.QueryParameters;
 import EarthSim.persistance.SimulationStorage;
 
 public class HeatedEarthSimulation implements Runnable {
@@ -41,9 +42,10 @@ public class HeatedEarthSimulation implements Runnable {
 	ArrayList<Long> calcTimeList = new ArrayList<Long>();
 	private final static Logger LOGGER = Logger
 			.getLogger(HeatedEarthSimulation.class.getName());
+	private String Name;
 	Calendar calendar;
 	private double orbit = 0;
-
+	private int length = 0;
 	private double tilt = 23;
 	SimulationStorage simulation;
 	
@@ -65,7 +67,10 @@ public class HeatedEarthSimulation implements Runnable {
 				.getCols()];
 
 	}
-
+	public int getGridSize() {
+		return gridSize;
+	}
+	
 	public void setGridSize(Integer size) {
 		this.gridSize = size;
 	}
@@ -206,21 +211,51 @@ public class HeatedEarthSimulation implements Runnable {
 		running = true;
 		paused = false;
 		
-		simulation = new SimulationStorage();
-		simulation.setAxialTilt(this.getTilt());
-		simulation.setEccentricity(this.getOrbit());
-		simulation.setGridSpacing(this.gridSize);
-		simulation.setName("");
-		simulation.setCreateDate(calendar.getTime());
-		simulation.setTime(timeInterval);
+		Date tempDate = calendar.getTime();
 		
-		dataManager.store(simulation);
+		QueryParameters queryParameters = new QueryParameters();
+		queryParameters.setName(this.Name);
+		queryParameters.setGridSpacing(this.gridSize);
+		queryParameters.setTilt(this.tilt);
+		queryParameters.setOrbit(this.orbit);
+		queryParameters.setTimeStep(this.timeInterval);
+		queryParameters.setLowerLatitude(-10);
+		queryParameters.setUpperLatitude(10);
+		queryParameters.setLowerLongitude(-60);
+		queryParameters.setUpperLongitude(60);
+		
+		calendar.set(2014, 0, 4, 19, 40);
+		Date startDate = calendar.getTime();
+		queryParameters.setStartDate(startDate);
+		
+		calendar.set(2014, 0, 4, 19, 44);
+		Date endDate = calendar.getTime();
+		queryParameters.setEndDate(endDate);
+		
+		calendar.setTime(tempDate);
+		List<SimulationStorage> simulationList = dataManager.readSimulation(queryParameters);
+		
+		if (simulationList != null) {
+		// Just a test to get the right storage structure.
+		simulation = simulationList.get(0);
+		}
+		else {
+			simulation = new SimulationStorage(this);		
+			simulation.setCreateDate(calendar.getTime());
+			simulation.setTime(timeInterval);
+		}
+		
+		dataManager.setSimulation(simulation);
+		dataManager.storeSimulation();
+		
 		
 		while (running) {
 			while (!paused) {
 				this.rotateEarth();			
 
-				dataManager.store(createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime()));
+				List<GridCellStorage> gridCells = createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime());
+				simulation.setGridCells(gridCells);
+				dataManager.storeSimulationCells();
 				calendar.add(Calendar.MINUTE, timeInterval);
 				if (presentation != null) {
 					System.out.println("Simulation update");
@@ -306,6 +341,22 @@ public class HeatedEarthSimulation implements Runnable {
 
 	public void setTilt(double tilt) {
 		this.tilt = tilt;
+	}
+
+	public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		Name = name;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
 	}
 
 }

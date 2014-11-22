@@ -11,16 +11,11 @@
 		
 		<property name="dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
 		
-<<<<<<< HEAD
-<!-- 		<property name="show_sql">true</property> -->
 
-		<mapping class = "EarthSim.SimulationStorage"/>
-		<mapping class = "EarthSim.GridCellStorage" />
-=======
 		<property name="show_sql">true</property>
 		
 		<mapping class = "EarthSim.persistance.SimulationStorage"/>
 		<mapping class = "EarthSim.persistance.GridCellStorage" />
->>>>>>> branch 'test' of https://github.com/csamuel6/6310_P3.git
+
 	</session-factory>
 </hibernate-configuration>
