@@ -17,19 +17,52 @@ public class Demo
 	//	 initializeLogging();
 		 
 		int blen = 0;
-	    boolean  s, p, r, t, b; 
+	    boolean  s, p, r, t, b, g; 
 	    s = p = r = t = b = false; 
+	    
+
+//	    -p #: The precision of the data to be stored, in decimal digits after the decimal point. 
+//	    The default is to use the number of digits storable in a normalized float variable. The maximum is 
+//	    the number of digits storable in a normalized double variable. The minimum is zero.
+//	    -g #: The geographic precision (sampling rate) of the temperature data to be stored, as an integer 
+//	    percentage of the number of grid cells saved versus the number simulated. The default is 100%; that is, a value is stored for each grid cell.
+//	    -t #: The temporal precision of the temperature data to be stored, as an integer percentage of the number 
+//	    of time periods saved versus the number computed. The default is 100%; that is, all computed values should be stored.
+
+	    
+	    int dataPrecision = 2;
+	    int geographicalPrecision = 2;
+	    int temporalPrecision = 2;
+	    
 	   
 		 for (int i = 0; i < args.length; i++) {
-		        if (args[i].equalsIgnoreCase("-s")) {
+		        if (args[i].equalsIgnoreCase("-s")) 
+		        {
 		            s = true;
-		        } else if (args[i].equalsIgnoreCase("-p")) {
+		        } 
+		        else if (args[i].equalsIgnoreCase("-p")) 
+		        {
 		        	p = true;
-		        } else if (args[i].equalsIgnoreCase("-r")) {
+		        	dataPrecision = Integer.parseInt(args[i+1]);
+		        	
+		        } 
+		        else if (args[i].equalsIgnoreCase("-r")) 
+		        {
 		            r = true;
-		        } else if (args[i].equalsIgnoreCase("-t")) {
+		        } 
+		        else if (args[i].equalsIgnoreCase("-t")) 
+		        {
 		            t = true;
-		        } else if (args[i].equalsIgnoreCase("-b")) {
+		            temporalPrecision = Integer.parseInt(args[i+1]);
+		            
+		        } 
+		        else if (args[i].equalsIgnoreCase("-g")) 
+		        {
+		            geographicalPrecision = Integer.parseInt(args[i+1]);
+		            
+		        } 
+		        else if (args[i].equalsIgnoreCase("-b")) 
+		        {
 		            try {
 		                blen = Integer.parseInt(args[i+1]);
 		                b = true;
@@ -62,9 +95,12 @@ public class Demo
     	 initiative="S";
      else
     	 initiative="G";
+     
+     
     	
 
-     HeatedEarthGUI gui = new HeatedEarthGUI(p, s, initiative, blen);
+     HeatedEarthGUI.createInstance(dataPrecision, geographicalPrecision, temporalPrecision, initiative, blen);
+     HeatedEarthGUI gui = HeatedEarthGUI.getinstance();
      gui.displayGui();
 	 }
      

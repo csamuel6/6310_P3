@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import EarthSim.main.GridCell;
+import EarthSim.main.HeatedEarthGUI;
 
 @Entity
 @IdClass(GridCellStoragePK.class)
@@ -20,19 +21,21 @@ import EarthSim.main.GridCell;
 public class GridCellStorage {
 	
 	
-	private double temperature = 0.00;
+	private String temperature = "0.00";
     private double latitude, longitude;
     private Date Time;
     private SimulationStorage storage;
     private int xCoordinate;
     private int yCoordinate;
     
+    private static String format = "%."+HeatedEarthGUI.getinstance().getDataPrecision()+"f";
+    
 	public GridCellStorage() {
     	
     }
 	
     public GridCellStorage(GridCell gridCell) {
-    	this.temperature = gridCell.getTemp();
+    	this.temperature = String.format(format, gridCell.getTemp());
     	this.latitude = gridCell.getLatitude();
     	this.longitude = gridCell.getLongtitude();
     	this.xCoordinate = gridCell.getxCoordinate();
@@ -41,7 +44,8 @@ public class GridCellStorage {
     
     
     public GridCellStorage(double temp, double latitude, double longitude, Date date, SimulationStorage simulation) {
-    	this.temperature = temp;
+    	
+    	this.temperature = String.format(format, temp);
     	this.latitude = latitude;
     	this.longitude = longitude;
     	this.Time = date;
@@ -49,11 +53,11 @@ public class GridCellStorage {
     }
 	
     @Id
-    public double getTemperature() {
+    public String getTemperature() {
 		return temperature;
 	}
 
-	public void setTemperature(double temp) {
+	public void setTemperature(String temp) {
 		this.temperature = temp;
 	}
 	@Id

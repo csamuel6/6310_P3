@@ -55,11 +55,50 @@ public class HeatedEarthGUI extends JFrame {
 	JPanel rightPanel = new JPanel();
 	private JLabel time = new JLabel();
 
-	public HeatedEarthGUI(boolean presentationThread,
+	int dataPrecision = 0;
+    int geographicalPrecision = 0;
+    int temporalPrecision = 0;
+    
+    private static HeatedEarthGUI heatedEarthGUI = null;
+
+	private HeatedEarthGUI(boolean presentationThread,
 			boolean simulatorOwnThread, String initiative, Integer bufferSize) {
 		super();
 		this.presentationOwnThread = presentationThread;
 		this.simulatorOwnThread = simulatorOwnThread;
+		this.queue = new ArrayBlockingQueue<Message>(bufferSize);
+		this.initiative = initiative;
+		display = new HeatedEarthPresentation(0, queue, 1, paused);
+
+	}
+	
+	
+	public static void createInstance(int dataPrecision, int geographicalPrecision, int temporalPrecision, String initiative, Integer bufferSize)
+	{
+		
+		if (heatedEarthGUI == null)
+		{
+			heatedEarthGUI =  new HeatedEarthGUI(dataPrecision, geographicalPrecision, temporalPrecision,  "G", 25);
+		}
+
+	}
+	
+	
+	public static HeatedEarthGUI getinstance ()
+	{
+		return heatedEarthGUI;
+	}
+	
+	
+	private HeatedEarthGUI(int dataPrecision, int geographicalPrecision, int temporalPrecision, String initiative, Integer bufferSize) {
+		super();
+		
+		this.dataPrecision = dataPrecision;
+		this.geographicalPrecision = geographicalPrecision;
+		this.temporalPrecision = temporalPrecision;
+		
+		this.presentationOwnThread = true;
+		this.simulatorOwnThread = true;
 		this.queue = new ArrayBlockingQueue<Message>(bufferSize);
 		this.initiative = initiative;
 		display = new HeatedEarthPresentation(0, queue, 1, paused);
@@ -75,6 +114,8 @@ public class HeatedEarthGUI extends JFrame {
 		sim = new HeatedEarthSimulation(Integer.valueOf(gridSize.getText()),
 				Integer.valueOf(simTimeStep.getText()), Double.valueOf(orbit
 						.getText()), Double.valueOf(tilt.getText()), queue);
+		
+
 		runButton.setEnabled(true);
 		// Set initiative
 		if ("S".equalsIgnoreCase(initiative)) {
@@ -504,4 +545,35 @@ public class HeatedEarthGUI extends JFrame {
 			}
 		}
 	}
+	
+	
+    public int getDataPrecision() {
+		return dataPrecision;
+	}
+
+
+	public void setDataPrecision(int dataPrecision) {
+		this.dataPrecision = dataPrecision;
+	}
+
+
+	public int getGeographicalPrecision() {
+		return geographicalPrecision;
+	}
+
+
+	public void setGeographicalPrecision(int geographicalPrecision) {
+		this.geographicalPrecision = geographicalPrecision;
+	}
+
+
+	public int getTemporalPrecision() {
+		return temporalPrecision;
+	}
+
+
+	public void setTemporalPrecision(int temporalPrecision) {
+		this.temporalPrecision = temporalPrecision;
+	}
+
 }

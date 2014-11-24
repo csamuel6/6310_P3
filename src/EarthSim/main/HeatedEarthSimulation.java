@@ -48,6 +48,9 @@ public class HeatedEarthSimulation implements Runnable {
 	private int length = 0;
 	private double tilt = 23;
 	SimulationStorage simulation;
+    private int dataPrecision = 0;
+    private int geographicalPrecision = 0;
+    private int temporalPrecision = 0;
 	
 	public HeatedEarthSimulation(int gs, int interval, double orbit,
 			double tilt, BlockingQueue<Message> queue) {
