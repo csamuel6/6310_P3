@@ -1,5 +1,7 @@
 package EarthSim.main;
 
+import java.util.Calendar;
+
 public class EarthRepresentation {
 	
 	
@@ -15,18 +17,33 @@ public class EarthRepresentation {
 	
 	private double averageTemperature = 288;
 	
+	//Variables for Orbit Calculation
+	//Set to defaults for Earth
+	private double eccentricity = 0.0167; //Value is (0,1] 
+	private double obliquity = 23.44; //Value (-180, 180)
+	private double perihelion = 147094000;
+	private double semiMajorAxis = 149600000;
+	private double argumentOfPeriapsis = 114;
+	private int rotationalPeriod = 1440; //minutes
+	private int orbitalPeriod = 525600; //minutes
+	private int day;
+	private double heatingRatio = 1.0;
+	private double distanceFromCenter = 0.0;
+	private double semiMinorAxis = 0.0;
+	
 	//add method to get grid proportion to the equator
 	
 	double sunLocation = 0;
 	private double x;
 	private double y;
 	
-	public EarthRepresentation (int gridSpacing, int interval, double orbit, double tilt)
+	public EarthRepresentation (int gridSpacing, int interval, double orbit, double tilt, double eccentricity)
 	{
 		this.gs= gridSpacing;
 		this.timeInterval = interval;
 		p = 360/gs;
 		this.earthsTilt = tilt;
+		this.eccentricity = eccentricity;
 	}
 	public int getCols()
 	{
@@ -247,8 +264,9 @@ public class EarthRepresentation {
 			
 		}
 		
-		return cellTemperature;
+		return cellTemperature * heatingRatio;
 	}
+	
 	public double getEarthsTilt() {
 		return earthsTilt;
 	}
@@ -274,8 +292,40 @@ public class EarthRepresentation {
 	 * Need to calculate mean anomaly, eccentric anomaly, and the true anomaly
 	 */
 	
-	public double meanAnomaly(double currentTime, double period){
-		return 2 * Math.PI * (currentTime/period);
+	/**
+	 * @return the eccentricity
+	 */
+	public double getEccentricity() {
+		return eccentricity;
+	}
+	/**
+	 * @param eccentricity the eccentricity to set
+	 */
+	public void setEccentricity(double eccentricity) {
+		this.eccentricity = eccentricity;
+	}
+	
+	public void setCurrentDay(int seconds){
+		this.day = seconds;
+	}
+	
+	public void calculateDistance(){
+		calculateSemiMinorAxis();
+		calculatePosition(semiMajorAxis, eccentricity, eccentricAnomaly(meanAnomaly(day/orbitalPeriod, rotationalPeriod), eccentricity, 15));
+		calculateDistanceFromCenter();
+	}
+	
+	public void calculateDistanceFromCenter(){
+		distanceFromCenter = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+		heatingRatio = semiMajorAxis/distanceFromCenter;
+	}
+	
+	private void calculateSemiMinorAxis(){
+		this.semiMinorAxis = Math.sqrt((semiMajorAxis * semiMajorAxis) * (1 - Math.pow(eccentricity, 2))); 
+	}
+	
+	public double meanAnomaly(double currentTime, double orbitalPeriod){
+		return 2 * Math.PI * (currentTime/orbitalPeriod);
 	}
 	
 	/*
@@ -339,5 +389,6 @@ public class EarthRepresentation {
 	public double calculateRadius(double semiMajorAxis, double eccentricity, double trueAnomaly){
 		return semiMajorAxis * ((1 - Math.pow(eccentricity,2)) / (1 + eccentricity * Math.cos(trueAnomaly)));
 	}
+
 	
 }

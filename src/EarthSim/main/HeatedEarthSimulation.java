@@ -29,6 +29,7 @@ public class HeatedEarthSimulation implements Runnable {
 	private BlockingQueue<Message> queue;
 	static int timeInterval = 0;
 	static int timeOfDay = 720;
+	private int elapsedMinutes = 0;
 	private HeatedEarthPresentation presentation = null;
 	private DataManager dataManager = new DataManager();
 	
@@ -47,23 +48,25 @@ public class HeatedEarthSimulation implements Runnable {
 	private double orbit = 0;
 	private int length = 0;
 	private double tilt = 23;
+	double eccentricity = 0.0167;
 	SimulationStorage simulation;
     private int dataPrecision = 0;
     private int geographicalPrecision = 0;
     private int temporalPrecision = 0;
 	
 	public HeatedEarthSimulation(int gs, int interval, double orbit,
-			double tilt, BlockingQueue<Message> queue) {
+			double tilt, double eccentricity, BlockingQueue<Message> queue) {
 		this.queue = queue;
 		this.gridSize = gs;
 		timeInterval = interval;
 		this.orbit = orbit;
 		this.tilt = tilt;
+		this.eccentricity = eccentricity;
 		calendar = Calendar.getInstance();
 		calendar.set(2014, Calendar.JANUARY, 4);
 		System.out.println("tilt " + tilt);
 
-		earthRepresentation = new EarthRepresentation(gs, interval, orbit, tilt);
+		earthRepresentation = new EarthRepresentation(gs, interval, orbit, tilt, eccentricity);
 		gridcellsSurface1 = new GridCell[earthRepresentation.getRows()][earthRepresentation
 				.getCols()];
 		gridcellsSurface2 = new GridCell[earthRepresentation.getRows()][earthRepresentation
@@ -83,8 +86,9 @@ public class HeatedEarthSimulation implements Runnable {
 	}
 
 	public void reset() {
+
 		earthRepresentation = new EarthRepresentation(gridSize, timeInterval,
-				orbit, tilt);
+				orbit, tilt, eccentricity);
 		gridcellsSurface1 = new GridCell[earthRepresentation.getRows()][earthRepresentation
 				.getCols()];
 		gridcellsSurface2 = new GridCell[earthRepresentation.getRows()][earthRepresentation
@@ -274,7 +278,9 @@ public class HeatedEarthSimulation implements Runnable {
 	protected void diffuse(GridCell[][] grid1, GridCell[][] grid2) {
 
 		earthRepresentation.calculateAverageTemperature(grid1);
-
+		earthRepresentation.setCurrentDay(elapsedMinutes);
+		earthRepresentation.calculateDistance();
+		
 		for (int i = 0; i < earthRepresentation.getRows(); i++) {
 			for (int j = 0; j < earthRepresentation.getCols(); j++) {
 
