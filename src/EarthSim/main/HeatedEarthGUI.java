@@ -33,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import EarthSim.persistance.DataManager;
@@ -147,7 +148,7 @@ public class HeatedEarthGUI extends JFrame {
 
 	}
 
-	public JPanel createMainGrid() {
+	public JScrollPane createMainGrid() {
 		JPanel pane = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -257,7 +258,10 @@ public class HeatedEarthGUI extends JFrame {
 		// c.ipadx=20;
 		pane.add(display, c);
 
-		return pane;
+		JScrollPane scrollpane = new JScrollPane(pane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		
+		
+		return scrollpane;
 	}
 
 	private JPanel createMenu() {
