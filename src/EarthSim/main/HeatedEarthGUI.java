@@ -14,12 +14,16 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.Buffer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.InputVerifier;
 import javax.swing.JButton;
@@ -27,8 +31,13 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import EarthSim.persistance.DataManager;
+import EarthSim.persistance.QueryParameters;
+import EarthSim.persistance.SimulationStorage;
 
 public class HeatedEarthGUI extends JFrame {
 
@@ -42,6 +51,7 @@ public class HeatedEarthGUI extends JFrame {
 	private boolean paused = false;
 
 	JButton runButton = new JButton("Run Simulation");
+	JButton runQueryButton = new JButton("Run Query");
 	int textSize = 30;
 	int textSize20 = 20;
 	JTextField gridSize = new JTextField();
@@ -54,7 +64,17 @@ public class HeatedEarthGUI extends JFrame {
 	final JButton start = new JButton();
 	JPanel rightPanel = new JPanel();
 	private JLabel time = new JLabel();
-
+	JTextField lowerLatitude = new JTextField();
+	JTextField upperLatitude = new JTextField();
+	JTextField lowerLongitude = new JTextField();
+	JTextField upperLongitude = new JTextField();
+	JTextField startDateTextField = new JTextField();
+	JTextField endDateTextField = new JTextField();
+	private JList list;
+	private DefaultListModel listModel;
+	Date startDate;
+	Date endDate;
+	
 	int dataPrecision = 0;
     int geographicalPrecision = 0;
     int temporalPrecision = 0;
@@ -250,10 +270,10 @@ public class HeatedEarthGUI extends JFrame {
 		smallGrid.setLayout(new GridLayout(0, 1));
 
 		JLabel gridSizeLabel = new JLabel("Dimension of Grid(Degrees):");
-		gridSizeLabel.setFont(new Font("Arial", 0, textSize));
+		gridSizeLabel.setFont(new Font("Arial", 0, textSize20));
 
 		smallGrid.add(gridSizeLabel);
-		gridSize.setFont(new Font("Arial", 0, textSize));
+		gridSize.setFont(new Font("Arial", 0, textSize20));
 		gridSize.setToolTipText("Enter an Integer greater than zero.");
 		gridSize.setText("15");
 		gridSize.setInputVerifier(new InputVerifier() {
@@ -281,9 +301,9 @@ public class HeatedEarthGUI extends JFrame {
 		smallGrid.add(gridSize);
 
 		JLabel topLabel = new JLabel("Simulation Time Step(m):");
-		topLabel.setFont(new Font("Arial", 0, textSize));
+		topLabel.setFont(new Font("Arial", 0, textSize20));
 		smallGrid.add(topLabel);
-		simTimeStep.setFont(new Font("Arial", 0, textSize));
+		simTimeStep.setFont(new Font("Arial", 0, textSize20));
 		simTimeStep.setText("1");
 		simTimeStep.setToolTipText("Enter an Integer between zero and 1440.");
 		simTimeStep.setInputVerifier(new InputVerifier() {
@@ -307,9 +327,9 @@ public class HeatedEarthGUI extends JFrame {
 		smallGrid.add(simTimeStep);
 
 		JLabel bottomLabel = new JLabel("Display Rate(ms):");
-		bottomLabel.setFont(new Font("Arial", 0, textSize));
+		bottomLabel.setFont(new Font("Arial", 0, textSize20));
 		smallGrid.add(bottomLabel);
-		displayRate.setFont(new Font("Arial", 0, textSize));
+		displayRate.setFont(new Font("Arial", 0, textSize20));
 		displayRate.setText("10");
 		displayRate.setToolTipText("Enter an Integer between zero and 1000.");
 		displayRate.setInputVerifier(new InputVerifier() {
@@ -472,6 +492,212 @@ public class HeatedEarthGUI extends JFrame {
 		});
 		smallGrid.add(simulationName);
 		
+
+		JLabel LowerLatitude = new JLabel("Lower Latitude");
+		LowerLatitude.setFont(new Font("Arial", 0, textSize20));
+		smallGrid.add(LowerLatitude);
+		lowerLatitude.setFont(new Font("Arial", 0, textSize20));
+		lowerLatitude.setToolTipText("Enter a lower latitude.");
+		lowerLatitude.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String text = ((JTextField) input).getText();
+				try {
+					Integer value = Integer.valueOf(text); // to fix
+					if (value < -180 || value > 180) {
+						lowerLatitude.setText("");
+					}
+
+					try {
+						Integer.valueOf(lowerLatitude.getText());
+					} catch (NumberFormatException e) {
+						lowerLatitude.setText("");
+					}
+					return true;
+
+				} catch (NumberFormatException e) {
+					simulationLength.setText("");
+					return false;
+				}
+			}
+			});
+		smallGrid.add(lowerLatitude);
+		
+		JLabel UpperLatitude = new JLabel("Upper Latitude");
+		UpperLatitude.setFont(new Font("Arial", 0, textSize20));
+		smallGrid.add(UpperLatitude);
+		upperLatitude.setFont(new Font("Arial", 0, textSize20));
+		upperLatitude.setToolTipText("Enter a upper latitude.");
+		upperLatitude.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String text = ((JTextField) input).getText();
+				try {
+					Integer value = Integer.valueOf(text); // to fix
+					if (value < -180 || value > 180) {
+						upperLatitude.setText("");
+					}
+
+					try {
+						Integer.valueOf(upperLatitude.getText());
+					} catch (NumberFormatException e) {
+						upperLatitude.setText("");
+					}
+					return true;
+
+				} catch (NumberFormatException e) {
+					upperLatitude.setText("");
+					return false;
+				}
+			}
+			});
+		smallGrid.add(upperLatitude);
+		
+		JLabel LowerLongitude = new JLabel("Lower Longitude");
+		LowerLongitude.setFont(new Font("Arial", 0, textSize20));
+		smallGrid.add(LowerLongitude);
+		lowerLongitude.setFont(new Font("Arial", 0, textSize20));
+		lowerLongitude.setToolTipText("Enter a lower Longitude.");
+		lowerLongitude.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String text = ((JTextField) input).getText();
+				try {
+					Integer value = Integer.valueOf(text); // to fix
+					if (value < -90 || value > 90) {
+						lowerLongitude.setText("");
+					}
+
+					try {
+						Integer.valueOf(lowerLongitude.getText());
+					} catch (NumberFormatException e) {
+						lowerLongitude.setText("");
+					}
+					return true;
+
+				} catch (NumberFormatException e) {
+					lowerLongitude.setText("");
+					return false;
+				}
+			}
+			});
+		smallGrid.add(lowerLongitude);
+		
+		JLabel UpperLongitude = new JLabel("Upper Longitude");
+		UpperLongitude.setFont(new Font("Arial", 0, textSize20));
+		smallGrid.add(UpperLongitude);
+		upperLongitude.setFont(new Font("Arial", 0, textSize20));
+		upperLongitude.setToolTipText("Enter a upper longitude.");
+		upperLongitude.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String text = ((JTextField) input).getText();
+				try {
+					Integer value = Integer.valueOf(text); // to fix
+					if (value < -90 || value > 90) {
+						upperLongitude.setText("");
+					}
+
+					try {
+						Integer.valueOf(upperLongitude.getText());
+					} catch (NumberFormatException e) {
+						upperLongitude.setText("");
+					}
+					return true;
+
+				} catch (NumberFormatException e) {
+					upperLongitude.setText("");
+					return false;
+				}
+			}
+			});
+		smallGrid.add(upperLongitude);
+		
+		JLabel startDateLabel = new JLabel("Starting date (MM/dd/YYYY) and time (24 hour HH:mm:ss)");
+		topLabel.setFont(new Font("Arial", 0, textSize));
+		smallGrid.add(startDateLabel);
+		startDateTextField.setFont(new Font("Arial", 0, textSize20));
+		startDateTextField.setToolTipText("Enter a date and time (24 hour) in the format MM/dd/YYYY HH:mm:ss.");
+		startDateTextField.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String text = ((JTextField) input).getText();
+				try {
+					SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/YYYY HH:mm:ss"); // to fix
+					startDate = formatter.parse(text);
+					return true;
+				}  catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return false;
+				}
+			}
+		});
+		smallGrid.add(startDateTextField);
+		
+		JLabel endDateLabel = new JLabel("Ending date (MM/dd/YYYY) and time (24 hour HH:mm:ss)");
+		topLabel.setFont(new Font("Arial", 0, textSize));
+		smallGrid.add(endDateLabel);
+		endDateTextField.setFont(new Font("Arial", 0, textSize20));
+		endDateTextField.setToolTipText("Enter a date and time (24 hour) in the format MM/dd/YYYY HH:mm:ss.");
+		endDateTextField.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String text = ((JTextField) input).getText();
+				try {
+					SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/YYYY HH:mm:ss"); // to fix
+					endDate = formatter.parse(text);
+					return true;
+				}  catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return false;
+				}
+			}
+		});
+		smallGrid.add(endDateTextField);
+		
+		runQueryButton.setFont(new Font("Arial", 0, textSize));
+		runQueryButton.setEnabled(false);
+		runQueryButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				DataManager dataManager = new DataManager();
+				QueryParameters queryParameters = new QueryParameters();
+				queryParameters.setName(simulationName.getText());
+				queryParameters.setGridSpacing(Integer.valueOf(gridSize.getText()));
+				queryParameters.setTilt(Double.valueOf(tilt.getText()));
+				queryParameters.setOrbit(Double.valueOf(orbit.getText()));
+				queryParameters.setTimeStep(Integer.valueOf(simTimeStep.getText()));
+				queryParameters.setLowerLatitude(-10);
+				queryParameters.setUpperLatitude(10);
+				queryParameters.setLowerLongitude(-60);
+				queryParameters.setUpperLongitude(60);
+
+				queryParameters.setStartDate(startDate);
+				queryParameters.setEndDate(endDate);
+				
+				listModel.removeAllElements();
+				List<SimulationStorage> simulationList = dataManager.readSimulation(queryParameters);
+				for (SimulationStorage storage : simulationList) {
+					listModel.addElement(storage);
+				}
+				queue.clear();
+				repaint();
+
+				display.setGridSize(Integer.valueOf(gridSize.getText()));
+				sim.setGridSize(Integer.valueOf(gridSize.getText()));
+				sim.setTimeStep(Integer.valueOf(simTimeStep.getText()));
+				sim.setTilt(Double.valueOf(tilt.getText()));
+				sim.setOrbit(Double.valueOf(orbit.getText()));
+				sim.setLength(Integer.valueOf(simulationLength.getText()));
+				sim.setName(simulationName.getText());
+				run();
+			}
+		});
+		
+		smallGrid.add(runButton);
+		
 		runButton.setFont(new Font("Arial", 0, textSize));
 		runButton.setEnabled(false);
 		runButton.addActionListener(new ActionListener() {
@@ -493,6 +719,8 @@ public class HeatedEarthGUI extends JFrame {
 			}
 		});
 		smallGrid.add(runButton);
+		
+		
 		innerPanel.add(smallGrid);
 		return innerPanel;
 	}
