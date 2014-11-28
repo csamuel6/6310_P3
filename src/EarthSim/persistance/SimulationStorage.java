@@ -29,6 +29,10 @@ public class SimulationStorage {
 	private int timeStep;
 	private int simulationLength;
 	private Date creationDate; 
+
+
+	private int temporalPrecision;
+	private int geoPrecision;
 	@Embedded
 	@ElementCollection
 	private List<GridCellStorage> gridCells = new ArrayList<GridCellStorage>();
@@ -61,6 +65,22 @@ public class SimulationStorage {
 	}
 	public void setGridSpacing(int gridSize) {
 		this.gridSpacing = gridSize;
+	}
+	
+	public int getTemporalPrecision() {
+		return temporalPrecision;
+	}
+
+	public void setTemporalPrecision(int temporalPrecision) {
+		this.temporalPrecision = temporalPrecision;
+	}
+
+	public int getGeoPrecision() {
+		return geoPrecision;
+	}
+
+	public void setGeoPrecision(int geoPrecision) {
+		this.geoPrecision = geoPrecision;
 	}
 	
 	public double getAxialTilt() {
