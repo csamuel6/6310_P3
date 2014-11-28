@@ -63,6 +63,31 @@ public class DataManager {
 			}
 		}
 	}
+	
+	
+	
+	public List<SimulationStorage> getAllSimulations() 
+	{
+		List<SimulationStorage> simList = null;
+
+			String sql = "FROM SimulationStorage AS sim";
+
+			
+			Query query = session.createQuery(sql);
+
+			List<SimulationStorage> list = query.list();
+
+			if (list.isEmpty()) {
+				return null;
+			}
+			simList = new ArrayList<SimulationStorage>();
+			for (Object obj : list) {
+				SimulationStorage sim = (SimulationStorage) obj;
+				simList.add(sim);
+			}
+		
+		return simList;
+	}
 
 	public List<SimulationStorage> readSimulation(QueryParameters queryParameters) {
 		List<SimulationStorage> simList = null;
