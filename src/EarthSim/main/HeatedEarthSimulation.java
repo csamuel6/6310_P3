@@ -50,18 +50,18 @@ public class HeatedEarthSimulation implements Runnable {
 	private double tilt = 23;
 	double eccentricity = 0.0167;
 	SimulationStorage simulation;
-    private int dataPrecision = 0;
-    private int geographicalPrecision = 0;
-    private int temporalPrecision = 0;
+    private int dataPrecision = HeatedEarthGUI.getinstance().getDataPrecision();
+    private int geographicalPrecision = HeatedEarthGUI.getinstance().getGeographicalPrecision();
+    private int temporalPrecision = HeatedEarthGUI.getinstance().getTemporalPrecision();
 	
-	public HeatedEarthSimulation(int gs, int interval, double orbit,
-			double tilt, double eccentricity, BlockingQueue<Message> queue) {
+	public HeatedEarthSimulation (int gs, int interval, double orbit,
+			double tilt,  BlockingQueue<Message> queue) {
 		this.queue = queue;
 		this.gridSize = gs;
 		timeInterval = interval;
 		this.orbit = orbit;
 		this.tilt = tilt;
-		this.eccentricity = eccentricity;
+		this.eccentricity = orbit;
 		calendar = Calendar.getInstance();
 		calendar.set(2014, Calendar.JANUARY, 4);
 		System.out.println("tilt " + tilt);
@@ -221,6 +221,8 @@ public class HeatedEarthSimulation implements Runnable {
 		simulation = new SimulationStorage(this);		
 		simulation.setCreateDate(calendar.getTime());
 		simulation.setTime(timeInterval);
+		simulation.setGeoPrecision(this.geographicalPrecision);
+		simulation.setTemporalPrecision(this.temporalPrecision);
 		
 		dataManager.setSimulation(simulation);
 		dataManager.storeSimulation();
