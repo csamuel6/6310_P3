@@ -339,7 +339,11 @@ public class UserQueryInterface extends JFrame {
 		
 		for (SimulationStorage s : list)
 		{
-			simulationList.add(s.getName());
+			if (s.getName() != null && s.getName().length() > 0)
+			{
+				simulationList.add(s.getName());
+			}
+			
 		}
 
 	}

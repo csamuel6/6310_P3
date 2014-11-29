@@ -36,29 +36,48 @@ public class Demo
 	    
 	   
 		 for (int i = 0; i < args.length; i++) {
-		        if (args[i].equalsIgnoreCase("-s")) 
-		        {
-		            s = true;
-		        } 
-		        else if (args[i].equalsIgnoreCase("-p")) 
+		        if (args[i].equalsIgnoreCase("-p")) 
 		        {
 		        	p = true;
 		        	dataPrecision = Integer.parseInt(args[i+1]);
 		        	
-		        } 
-		        else if (args[i].equalsIgnoreCase("-r")) 
-		        {
-		            r = true;
 		        } 
 		        else if (args[i].equalsIgnoreCase("-t")) 
 		        {
 		            t = true;
 		            temporalPrecision = Integer.parseInt(args[i+1]);
 		            
+		            try {
+		            	temporalPrecision = Integer.parseInt(args[i+1]);
+		             
+		            } catch (NumberFormatException e) {
+		                System.out.println("Temporal Precision should be an integer between 0 and 100");
+		                System.exit(1);
+		            }
+		            if (temporalPrecision < 0 || temporalPrecision > 100) {
+		                System.out.println("Temporal Precision must be between 0 and 100");
+		                System.exit(1);
+		            }
+		            
 		        } 
 		        else if (args[i].equalsIgnoreCase("-g")) 
 		        {
 		            geographicalPrecision = Integer.parseInt(args[i+1]);
+		            
+		            
+		            try {
+		            	geographicalPrecision = Integer.parseInt(args[i+1]);
+		                b = true;
+		            } catch (NumberFormatException e) {
+		                System.out.println("Buffer size should be an integer between 0 and 100");
+		                System.exit(1);
+		            }
+		            if (blen < 0 || blen > 100) {
+		                System.out.println("Buffer size must be between 0 and 100");
+		                System.exit(1);
+		            }
+		            
+		            
 		            
 		        } 
 		        else if (args[i].equalsIgnoreCase("-b")) 
