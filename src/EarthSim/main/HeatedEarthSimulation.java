@@ -334,7 +334,6 @@ public class HeatedEarthSimulation implements Runnable {
 
 		earthRepresentation.calculateAverageTemperature(grid1);
 		earthRepresentation.setCurrentDay(calendar);
-		earthRepresentation.calculateDistance();
 		
 		for (int i = 0; i < earthRepresentation.getRows(); i++) {
 			for (int j = 0; j < earthRepresentation.getCols(); j++) {
@@ -348,7 +347,7 @@ public class HeatedEarthSimulation implements Runnable {
 		// advance sun according to interval
 		timeOfDay = (timeOfDay + timeInterval) % 1440;
 		SunRepresentation.sunLocation = 180 - (timeOfDay / 4);
-
+		calendar.add(Calendar.DAY_OF_WEEK_IN_MONTH, 1);
 	}
 
 	// copied this from TestSimulator

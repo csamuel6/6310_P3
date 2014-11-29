@@ -224,7 +224,7 @@ public class EarthRepresentation {
 	
 	public double calculateCellTemperature(GridCell cell)
 	{
-		
+		calculateDistance();
 		double initialTemperature = cell.getTemp();
 		double temperatureDueToSun = SunRepresentation.calculateTemperatureDueToSun(cell, this);
 		double temperatureDueToCooling = SunRepresentation.calculateTemperatureDueToCooling(cell, this);
@@ -242,7 +242,7 @@ public class EarthRepresentation {
 		
 		if ( temperatureDueToSun != 0.0 )
 		{
-			cellTemperature = (cellTemperature + temperatureDueToSun); // / 2;//avg current temp with sun cause temp
+			cellTemperature = (cellTemperature + temperatureDueToSun * heatingRatio); // / 2;//avg current temp with sun cause temp
 		}
 		
 		if (Double.isNaN(cellTemperature) )
@@ -263,7 +263,7 @@ public class EarthRepresentation {
 			System.out.println("nan final ");
 			
 		}
-		return cellTemperature * heatingRatio;
+		return cellTemperature;
 	}
 	
 	public double getEarthsTilt() {
