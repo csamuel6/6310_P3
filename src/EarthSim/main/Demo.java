@@ -32,7 +32,7 @@ public class Demo
 	    
 	    int dataPrecision = 2;
 	    int geographicalPrecision = 2;
-	    int temporalPrecision = 2;
+	    int temporalPrecision = 100;
 	    
 	   
 		 for (int i = 0; i < args.length; i++) {
@@ -98,6 +98,7 @@ public class Demo
      
      
     	
+     System.out.println("tmp " + temporalPrecision + "  geo" + geographicalPrecision + "  data " + dataPrecision);
 
      HeatedEarthGUI.createInstance(dataPrecision, geographicalPrecision, temporalPrecision, initiative, blen);
      HeatedEarthGUI gui = HeatedEarthGUI.getinstance();

@@ -52,8 +52,9 @@ public class HeatedEarthSimulation implements Runnable {
 	SimulationStorage simulation;
     private int dataPrecision = HeatedEarthGUI.getinstance().getDataPrecision();
     private int geographicalPrecision = HeatedEarthGUI.getinstance().getGeographicalPrecision();
-    private int temporalPrecision = HeatedEarthGUI.getinstance().getTemporalPrecision();
-	
+    
+    
+    
 	public HeatedEarthSimulation (int gs, int interval, double orbit,
 			double tilt,  BlockingQueue<Message> queue) {
 		this.queue = queue;
@@ -222,20 +223,72 @@ public class HeatedEarthSimulation implements Runnable {
 		simulation.setCreateDate(calendar.getTime());
 		simulation.setTime(timeInterval);
 		simulation.setGeoPrecision(this.geographicalPrecision);
-		simulation.setTemporalPrecision(this.temporalPrecision);
+		simulation.setTemporalPrecision(HeatedEarthGUI.getinstance().getTemporalPrecision());
 		
 		dataManager.setSimulation(simulation);
 		dataManager.storeSimulation();
 		
+		double percentageToStore = HeatedEarthGUI.getinstance().getTemporalPrecision()/100d;
+		double numberToStore =  percentageToStore * 10;
+		double numberNotToStore =  10 - numberToStore;
+		
+		double numberOfIterations =  (numberToStore / numberNotToStore);  // 80       8/2  - 4
+		
+		double numIterationRev =  (numberNotToStore/numberToStore);    // 20   8/2  - 4
+		
+		int count = 0;
 		
 		while (running) {
 			while (!paused) {
 				this.rotateEarth();			
 
 				List<GridCellStorage> gridCells = createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime());
-				simulation.setGridCells(gridCells);
-				dataManager.storeSimulationCells();
-				calendar.add(Calendar.MINUTE, timeInterval);
+				
+				
+				if (numberToStore >= 5)
+				{
+				
+					if (count < numberOfIterations)
+					{
+						System.out.println(" count less  " );
+						
+						simulation.setGridCells(gridCells);
+						dataManager.storeSimulationCells();
+						count++;
+					}
+					else
+					{
+						
+						System.out.println(" count more  " );
+						count = 0;
+					}
+					
+				}
+				else
+				{
+					
+					if (count < numIterationRev)
+					{
+						System.out.println(" count less  " );
+						count++;
+					}
+					else
+					{
+						simulation.setGridCells(gridCells);
+						dataManager.storeSimulationCells();
+						
+						System.out.println(" count more  " );
+						count = 0;
+					}
+					
+					
+					
+					
+					
+				}
+				
+				
+				calendar.add(Calendar.HOUR, timeInterval);
 				if (presentation != null) {
 					System.out.println("Simulation update");
 					presentation.update();
