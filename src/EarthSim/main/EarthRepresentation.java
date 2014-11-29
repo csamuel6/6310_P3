@@ -26,7 +26,7 @@ public class EarthRepresentation {
 	private double argumentOfPeriapsis = 114;
 	private int rotationalPeriod = 1440; //minutes
 	private int orbitalPeriod = 525600; //minutes
-	private int day;
+	private Calendar day;
 	private double heatingRatio = 1.0;
 	private double distanceFromCenter = 0.0;
 	private double semiMinorAxis = 0.0;
@@ -263,7 +263,6 @@ public class EarthRepresentation {
 			System.out.println("nan final ");
 			
 		}
-		
 		return cellTemperature * heatingRatio;
 	}
 	
@@ -305,14 +304,8 @@ public class EarthRepresentation {
 		this.eccentricity = eccentricity;
 	}
 	
-	public void setCurrentDay(int seconds){
-		this.day = seconds;
-	}
-	
-	public void calculateDistance(){
-		calculateSemiMinorAxis();
-		calculatePosition(semiMajorAxis, eccentricity, eccentricAnomaly(meanAnomaly(day/orbitalPeriod, rotationalPeriod), eccentricity, 15));
-		calculateDistanceFromCenter();
+	public void setCurrentDay(Calendar day){
+		this.day = day;
 	}
 	
 	public void calculateDistanceFromCenter(){
@@ -390,5 +383,27 @@ public class EarthRepresentation {
 		return semiMajorAxis * ((1 - Math.pow(eccentricity,2)) / (1 + eccentricity * Math.cos(trueAnomaly)));
 	}
 
+	public void calculateDistance(){
+		//Julian Day
+		double A = Math.floor(day.YEAR/100);
+		A = 2- A + Math.floor(A/4);
+		
+		double julianDay = Math.floor(365.25 * (day.YEAR + 4716)) + Math.floor(30.6001 * (day.MONTH + 1)) + day.DAY_OF_WEEK_IN_MONTH + A - 1524.5;
+		julianDay = Math.round(julianDay*1000000)/1000000;
+		
+		//Angles
+		double dr = Math.PI/180;
+		double T = (julianDay - 2451545.0)/36525.0;
+		double M = 357.52910 + 35999.05030 * T - 0.0001559*T*T-0.00000048*T*T*T;
+		double M_rad = M * dr;
+		double e = eccentricity-0.000042037*T-0.0000001236*T*T;
+		double C = (1.914600-0.004817*T-0.000014*T*T)*Math.sin(M_rad)
+			    +(0.019993-0.000101*T)*Math.sin(2.*M_rad)+0.000290*Math.sin(3.*M_rad);
+		double f = M_rad + C*dr;
+		
+		//Distance (AUs)
+		double distanceAU = 1.000001018*(1-e*e)/(1+e*Math.cos(f));
+		heatingRatio = distanceAU;
+	}
 	
 }

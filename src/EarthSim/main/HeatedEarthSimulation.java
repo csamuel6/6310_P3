@@ -333,7 +333,7 @@ public class HeatedEarthSimulation implements Runnable {
 	protected void diffuse(GridCell[][] grid1, GridCell[][] grid2) {
 
 		earthRepresentation.calculateAverageTemperature(grid1);
-		earthRepresentation.setCurrentDay(elapsedMinutes);
+		earthRepresentation.setCurrentDay(calendar);
 		earthRepresentation.calculateDistance();
 		
 		for (int i = 0; i < earthRepresentation.getRows(); i++) {
