@@ -20,7 +20,7 @@ public class SunRepresentation {
 	 * 
 	 */
 	
-	public static double calculateTemperatureDueToSun(GridCell cell, EarthRepresentation earthRepresentation)
+	public static double calculateTemperatureDueToSun(GridCell cell, EarthRepresentation earthRepresentation, double heatingRatio)
 	{
 		
 		///----c165----*195-----x210-------
@@ -37,13 +37,13 @@ public class SunRepresentation {
 		
 		double timeOffset = ((double)earthRepresentation.getTimeInterval() )/ 60.0 ;
 		
-		return sunHeatOutputPerHour * timeOffset *  longitudeDiffCosine * latitudeCosineDiff;  // Math.cos(Math.toRadians(cell.getCenterLatitude() )) *
+		return (heatingRatio * sunHeatOutputPerHour) * timeOffset *  longitudeDiffCosine * latitudeCosineDiff;  // Math.cos(Math.toRadians(cell.getCenterLatitude() )) *
 		
 	}
 	
 
 	
-	public static double calculateTemperatureDueToCooling(GridCell cell, EarthRepresentation earthRepresentation)
+	public static double calculateTemperatureDueToCooling(GridCell cell, EarthRepresentation earthRepresentation, double heatingRatio)
 	{
 
 		double cellTemperature = cell.getTemp();
@@ -58,7 +58,7 @@ public class SunRepresentation {
 //		double totalheat = sunHeatOutput1 * attenuationConstant * timeOffset; 
 		double attenuationConstant = .406867508241966 /2.0;
 		
-		double temperatureFromCooling = -1.0 * sunHeatOutputPerHour * attenuationConstant * timeOffset  * relativeTemperatureFactor ;
+		double temperatureFromCooling = -1.0 * heatingRatio * sunHeatOutputPerHour * attenuationConstant * timeOffset  * relativeTemperatureFactor ;
 		
 		
 		return temperatureFromCooling;

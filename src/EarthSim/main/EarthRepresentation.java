@@ -226,8 +226,8 @@ public class EarthRepresentation {
 	{
 		calculateDistance();
 		double initialTemperature = cell.getTemp();
-		double temperatureDueToSun = SunRepresentation.calculateTemperatureDueToSun(cell, this);
-		double temperatureDueToCooling = SunRepresentation.calculateTemperatureDueToCooling(cell, this);
+		double temperatureDueToSun = SunRepresentation.calculateTemperatureDueToSun(cell, this, heatingRatio);
+		double temperatureDueToCooling = SunRepresentation.calculateTemperatureDueToCooling(cell, this, heatingRatio);
 		
 		//double temperateCooledPerHour = 23.16;//TODO - Kelly - where does this number come from?
 		//double timePassed = 1;//TODO - Kelly - where does this number come from? Should it be timeInterval?
@@ -242,7 +242,7 @@ public class EarthRepresentation {
 		
 		if ( temperatureDueToSun != 0.0 )
 		{
-			cellTemperature = (cellTemperature + temperatureDueToSun * heatingRatio); // / 2;//avg current temp with sun cause temp
+			cellTemperature = (cellTemperature + temperatureDueToSun); // / 2;//avg current temp with sun cause temp
 		}
 		
 		if (Double.isNaN(cellTemperature) )
@@ -269,6 +269,7 @@ public class EarthRepresentation {
 	public double getEarthsTilt() {
 		return earthsTilt;
 	}
+	
 	public void setEarthsTilt(double earthsTilt) {
 		this.earthsTilt = earthsTilt;
 	}
