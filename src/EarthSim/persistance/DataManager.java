@@ -68,7 +68,7 @@ public class DataManager {
 		List<SimulationStorage> simList = null;
 
 		String sql = "FROM SimulationStorage AS sim";
-		sql += " ORDER BY GeoPrecision, TemporalPrecision";
+		sql += " ORDER BY name";
 
 		Query query = session.createQuery(sql);
 
