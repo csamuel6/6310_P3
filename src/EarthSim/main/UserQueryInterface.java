@@ -97,6 +97,7 @@ public class UserQueryInterface extends JFrame {
 		contentPane.add(panel, BorderLayout.WEST);
 
 		simulationList = new javax.swing.JList(simulationListModel);
+		
 		simulationList.setBounds(100, 53, 262, 119);
 		simulationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ListSelectionModel listSelectionModel = simulationList
@@ -107,8 +108,18 @@ public class UserQueryInterface extends JFrame {
 		List<SimulationStorage> simulationStorageList = dataManager
 				.getAllSimulations();
 
-		for (SimulationStorage simulationStorage : simulationStorageList) {
-			simulationListModel.addElement(simulationStorage);
+		for (SimulationStorage s : simulationStorageList) 
+		{
+			
+	//		System.out.println(simulationStorageList.size() + " dfdfd ");
+			
+			if(s.getName() !=null && s.getName().length() > 1)
+			{
+		//		System.out.println(simulationStorageList.size() + " 1111111111111111111111111 ");
+				
+				simulationListModel.addElement(s);
+			}
+			
 		}
 
 		// Set up column for storing cell data
