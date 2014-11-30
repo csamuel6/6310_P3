@@ -63,33 +63,32 @@ public class DataManager {
 			}
 		}
 	}
-	
-	
-	
-	public List<SimulationStorage> getAllSimulations() 
-	{
+
+	public List<SimulationStorage> getAllSimulations() {
 		List<SimulationStorage> simList = null;
 
-			String sql = "FROM SimulationStorage AS sim";
+		String sql = "FROM SimulationStorage AS sim";
+		sql += " ORDER BY GeoPrecision, TemporalPrecision";
 
-			
-			Query query = session.createQuery(sql);
+		Query query = session.createQuery(sql);
 
-			List<SimulationStorage> list = query.list();
+		List<SimulationStorage> list = query.list();
 
-			if (list.isEmpty()) {
-				return null;
-			}
-			simList = new ArrayList<SimulationStorage>();
-			for (Object obj : list) {
-				SimulationStorage sim = (SimulationStorage) obj;
-				simList.add(sim);
-			}
-		
+		if (list.isEmpty()) {
+			return null;
+		}
+		simList = new ArrayList<SimulationStorage>();
+		for (Object obj : list) {
+			SimulationStorage sim = (SimulationStorage) obj;
+			sim.setGridCells(this.readAllGridCells(sim));
+			simList.add(sim);
+		}
+
 		return simList;
 	}
 
-	public List<SimulationStorage> readSimulation(QueryParameters queryParameters) {
+	public List<SimulationStorage> readSimulation(
+			QueryParameters queryParameters) {
 		List<SimulationStorage> simList = null;
 		if (queryParameters != null) {
 			String sql = "FROM SimulationStorage AS sim";
@@ -98,6 +97,7 @@ public class DataManager {
 			sql += " AND sim.gridSpacing = " + queryParameters.getGridSpacing();
 			sql += " AND sim.timeStep = " + queryParameters.getTimeStep();
 			sql += " and sim.name = :simulationName";
+			sql += " ORDER BY GeoPrecision, TemporalPrecision";
 			
 			Query query = session.createQuery(sql);
 			query.setParameter("simulationName", queryParameters.name);
@@ -116,7 +116,28 @@ public class DataManager {
 		return simList;
 	}
 
-	private List<GridCellStorage> readGridCells(QueryParameters queryParameters, SimulationStorage methodSimulation) {
+	private List<GridCellStorage> readAllGridCells(
+			SimulationStorage methodSimulation) {
+		List<GridCellStorage> gcStorage = null;
+
+		gcStorage = new ArrayList<GridCellStorage>();
+		String sql = "FROM GridCellStorage AS GridCell";
+		sql += " WHERE GridCell.storage.id = " + methodSimulation.getId();
+		Query query = session.createQuery(sql);
+		List list = query.list();
+		if (list.isEmpty()) {
+			return null;
+		}
+		for (Object obj : list) {
+			GridCellStorage gridCellStorage = (GridCellStorage) obj;
+			gcStorage.add(gridCellStorage);
+		}
+
+		return gcStorage;
+	}
+
+	private List<GridCellStorage> readGridCells(
+			QueryParameters queryParameters, SimulationStorage methodSimulation) {
 		List<GridCellStorage> gcStorage = null;
 		if (queryParameters != null) {
 			gcStorage = new ArrayList<GridCellStorage>();
@@ -135,12 +156,11 @@ public class DataManager {
 			Query query = session.createQuery(sql);
 			query.setParameter("StartDate", queryParameters.getStartDate());
 			query.setParameter("EndDate", queryParameters.getEndDate());
-			
+
 			List list = query.list();
 			if (list.isEmpty()) {
 				return null;
 			}
-			gcStorage = new ArrayList<GridCellStorage>();
 			for (Object obj : list) {
 				GridCellStorage gridCellStorage = (GridCellStorage) obj;
 				gcStorage.add(gridCellStorage);
@@ -148,7 +168,7 @@ public class DataManager {
 		}
 		return gcStorage;
 	}
-	
+
 	public SimulationStorage getSimulation() {
 		return _simulation;
 	}

@@ -128,4 +128,9 @@ public class SimulationStorage {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		String stringRepresentation = this.name;
+		return stringRepresentation;
+	}
 }

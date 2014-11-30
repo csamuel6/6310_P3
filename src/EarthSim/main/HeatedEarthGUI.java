@@ -69,12 +69,12 @@ public class HeatedEarthGUI extends JFrame {
 	final JButton start = new JButton();
 	JPanel rightPanel = new JPanel();
 	private JLabel time = new JLabel();
-	JTextField lowerLatitude = new JTextField();
-	JTextField upperLatitude = new JTextField();
-	JTextField lowerLongitude = new JTextField();
-	JTextField upperLongitude = new JTextField();
-	JTextField startDateTextField = new JTextField();
-	JTextField endDateTextField = new JTextField();
+//	JTextField lowerLatitude = new JTextField();
+//	JTextField upperLatitude = new JTextField();
+//	JTextField lowerLongitude = new JTextField();
+//	JTextField upperLongitude = new JTextField();
+//	JTextField startDateTextField = new JTextField();
+//	JTextField endDateTextField = new JTextField();
 	private JList list;
 	private DefaultListModel listModel;
 	Date startDate;
@@ -111,7 +111,6 @@ public class HeatedEarthGUI extends JFrame {
 	
 	public static HeatedEarthGUI getinstance ()
 	{
-		
 		return heatedEarthGUI;
 	}
 	
