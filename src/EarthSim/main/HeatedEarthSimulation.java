@@ -3,6 +3,7 @@ package EarthSim.main;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
@@ -25,6 +26,9 @@ public class HeatedEarthSimulation implements Runnable {
 
 	protected static GridCell[][] gridcellsSurface1;
 	protected static GridCell[][] gridcellsSurface2;
+	
+	HashMap<Integer, Integer>  numberToSkip = new HashMap<Integer, Integer>();
+	HashMap<Integer, Integer>  numberToStore = new HashMap<Integer, Integer>();
 
 	private BlockingQueue<Message> queue;
 	static int timeInterval = 0;
@@ -72,6 +76,8 @@ public class HeatedEarthSimulation implements Runnable {
 				.getCols()];
 		gridcellsSurface2 = new GridCell[earthRepresentation.getRows()][earthRepresentation
 				.getCols()];
+		
+		createPercentageMaps();
 
 	}
 	public int getGridSize() {
@@ -296,17 +302,122 @@ public class HeatedEarthSimulation implements Runnable {
 			}
 		}
 	}
+	
+	public void createPercentageMaps()
+	{
+//		0
+//		9	1
+//		4	1
+//		3	1
+//		2	1
+//		1	1
+//		1	2
+//		1	3
+//		1	4
+//		1	5
+//		0	10
+		
+
+		
+		numberToSkip.put(0, 10);
+		numberToSkip.put(1, 9);
+		numberToSkip.put(2, 4);
+		numberToSkip.put(3, 3);
+		numberToSkip.put(4, 2);
+		numberToSkip.put(5, 1);
+		numberToSkip.put(6, 1);
+		numberToSkip.put(7, 1);
+		numberToSkip.put(8, 1);
+		numberToSkip.put(9, 1);
+		numberToSkip.put(10, 0);
+		
+		numberToStore.put(0, 0);
+		numberToStore.put(1, 1);
+		numberToStore.put(2, 1);
+		numberToStore.put(3, 1);
+		numberToStore.put(4, 1);
+		numberToStore.put(5, 1);
+		numberToStore.put(6, 2);
+		numberToStore.put(7, 3);
+		numberToStore.put(8, 4);
+		numberToStore.put(9, 5);
+		numberToStore.put(10, 10);
+		
+		
+		
+		
+		
+		
+	}
 
 	private List<GridCellStorage> createGridStorageCells(GridCell[][] grid, SimulationStorage methodSimulation, Date currentTime) {
 		//GridCellStorage[][] gridCellList = new GridCellStorage[earthRepresentation.getRows()][earthRepresentation.getCols()];
+		
+		double geoPrecisionPercentage = HeatedEarthGUI.getinstance().getGeographicalPrecision()/100d;
+		
+		int percentageToStore =  ((int) (geoPrecisionPercentage * 10));
+		
+		
+		int numberToStore = this.numberToStore.get(percentageToStore);
+		
+		int numberToSkip = this.numberToSkip.get(percentageToStore);
+		
+		int count = 0;
+		
+		
 		List<GridCellStorage> gridCell = new ArrayList<GridCellStorage>();
 		for (int i = 0; i < earthRepresentation.getRows(); i++) {
 			for (int j = 0; j < earthRepresentation.getCols(); j++) {
-				GridCellStorage gricCellStorage = new GridCellStorage(grid[i][j]);
 				
-				gricCellStorage.setTime(currentTime);
-				gricCellStorage.setStorage(methodSimulation);
-				gridCell.add(gricCellStorage);
+				
+				if (numberToSkip >= numberToStore)
+				{
+					
+					if (count < numberToSkip || numberToSkip == 0)
+					{
+						
+						count++;
+					}
+					else
+					{
+						GridCellStorage gricCellStorage = new GridCellStorage(grid[i][j]);		
+						gricCellStorage.setTime(currentTime);
+						gricCellStorage.setStorage(methodSimulation);
+						gridCell.add(gricCellStorage);
+						
+						count = 0;
+						
+					}
+					
+				}
+				else
+				{
+					
+					if (count < numberToStore || numberToStore == 10)
+					{
+						
+						GridCellStorage gricCellStorage = new GridCellStorage(grid[i][j]);		
+						gricCellStorage.setTime(currentTime);
+						gricCellStorage.setStorage(methodSimulation);
+						gridCell.add(gricCellStorage);
+						
+						
+						count++;
+					}
+					else
+					{
+
+						count = 0;
+						
+					}
+					
+				}
+				
+				
+				
+
+				
+				
 			}
 		}
 

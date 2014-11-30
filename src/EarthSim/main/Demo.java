@@ -31,30 +31,48 @@ public class Demo
 
 	    
 	    int dataPrecision = 2;
-	    int geographicalPrecision = 2;
+	    int geographicalPrecision = 100;
 	    int temporalPrecision = 100;
 	    
 	   
 		 for (int i = 0; i < args.length; i++) {
 		        if (args[i].equalsIgnoreCase("-p")) 
 		        {
-		        	p = true;
-		        	dataPrecision = Integer.parseInt(args[i+1]);
+		        	
+		            try 
+		            {
+		            	dataPrecision = Integer.parseInt(args[i+1]);
+		             
+		            } 
+		            catch (NumberFormatException e) 
+		            {
+		                System.out.println("Data Precision should be an integer between 0 and 20");
+		                System.exit(1);
+		            }
+		            if (dataPrecision < 0 || dataPrecision > 20) 
+		            {
+		                System.out.println("Data Precision must be between 0 and 20");
+		                System.exit(1);
+		            }
 		        	
 		        } 
 		        else if (args[i].equalsIgnoreCase("-t")) 
 		        {
-		            t = true;
+		      
 		            temporalPrecision = Integer.parseInt(args[i+1]);
 		            
-		            try {
+		            try 
+		            {
 		            	temporalPrecision = Integer.parseInt(args[i+1]);
 		             
-		            } catch (NumberFormatException e) {
+		            } 
+		            catch (NumberFormatException e) 
+		            {
 		                System.out.println("Temporal Precision should be an integer between 0 and 100");
 		                System.exit(1);
 		            }
-		            if (temporalPrecision < 0 || temporalPrecision > 100) {
+		            if (temporalPrecision < 0 || temporalPrecision > 100) 
+		            {
 		                System.out.println("Temporal Precision must be between 0 and 100");
 		                System.exit(1);
 		            }
@@ -65,15 +83,19 @@ public class Demo
 		            geographicalPrecision = Integer.parseInt(args[i+1]);
 		            
 		            
-		            try {
+		            try 
+		            {
 		            	geographicalPrecision = Integer.parseInt(args[i+1]);
-		                b = true;
-		            } catch (NumberFormatException e) {
-		                System.out.println("Buffer size should be an integer between 0 and 100");
+		          
+		            } 
+		            catch (NumberFormatException e) 
+		            {
+		                System.out.println("Geographical Precision should be an integer between 0 and 100");
 		                System.exit(1);
 		            }
-		            if (blen < 0 || blen > 100) {
-		                System.out.println("Buffer size must be between 0 and 100");
+		            if (geographicalPrecision < 0 || geographicalPrecision > 100) 
+		            {
+		                System.out.println("Geographical Precision should be an integer between 0 and 100");
 		                System.exit(1);
 		            }
 		            
