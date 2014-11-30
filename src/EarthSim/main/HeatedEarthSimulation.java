@@ -192,7 +192,7 @@ public class HeatedEarthSimulation implements Runnable {
 		try {
 			Long before = (new Date()).getTime();
 			queue.put(new Message(prepareOutput(gridcellsSurface2),
-					currentSunLocation, earthRepresentation.getEarthsTilt()));
+					currentSunLocation, earthRepresentation.getEarthsTilt(), earthRepresentation.getHeatingRatio()));
 			waitList.add((new Date()).getTime() - before);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

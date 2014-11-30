@@ -52,6 +52,7 @@ public class HeatedEarthPresentation extends JPanel {
 	private boolean testing;
 	private Integer sunsLongitude = 0;
 	private double sunsLatitude = 63;
+	private double heatingRatio = 1.0;
 	private JLabel time;
 	private static final long serialVersionUID = 1L;
 	private String path = "images/worldmap.png";
@@ -217,6 +218,7 @@ public class HeatedEarthPresentation extends JPanel {
 			
 			sunsLongitude = update.getSunsLongitude().intValue();
 			sunsLatitude = update.getSunsLatitude();
+			heatingRatio = update.getHeatingRatio();
 			this.repaint();
 
 		} catch (InterruptedException ex) {
@@ -286,9 +288,9 @@ public class HeatedEarthPresentation extends JPanel {
 				}
 			}
 			g2d.setColor(new Color(255, 255, 0, 100));
-			Long newLong = (long) ((((float) sunsLongitude + 180) / 360) * size.width);
+			Long newLong = (long) ((((float) sunsLongitude + 180) / 360) * size.width * heatingRatio);
 
-			Long newLat = (long) ((((float) sunsLatitude + 90) / 180) * size.height);
+			Long newLat = (long) ((((float) sunsLatitude + 90) / 180) * size.height * heatingRatio);
 
 			// System.out.println(newLat + " lewlat   " + sunsLatitude);
 

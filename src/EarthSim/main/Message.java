@@ -5,8 +5,9 @@ public class Message {
 	private double[][] grid;
 	private Long sunsLongitude;
 	private double sunsLatitude;
+	private double heatingRatio;
 	
-	public Message(double[][] grid, Long sunsLongitude, double sunsLatitude) 
+	public Message(double[][] grid, Long sunsLongitude, double sunsLatitude, double heatingRatio) 
 	{
 		this.grid=grid;
 		this.sunsLongitude=sunsLongitude;
@@ -41,6 +42,20 @@ public class Message {
 	public void setSunsLatitude(double sunsLatitude) 
 	{
 		this.sunsLatitude = sunsLatitude;
+	}
+
+	/**
+	 * @return the heatingRatio
+	 */
+	public double getHeatingRatio() {
+		return heatingRatio;
+	}
+
+	/**
+	 * @param heatingRatio the heatingRatio to set
+	 */
+	public void setHeatingRatio(double heatingRatio) {
+		this.heatingRatio = heatingRatio;
 	}
 
 }

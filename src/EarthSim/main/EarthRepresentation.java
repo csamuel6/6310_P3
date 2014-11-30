@@ -406,5 +406,17 @@ public class EarthRepresentation {
 		double distanceAU = 1.000001018*(1-e*e)/(1+e*Math.cos(f));
 		heatingRatio = distanceAU;
 	}
+	/**
+	 * @return the heatingRatio
+	 */
+	public double getHeatingRatio() {
+		return heatingRatio;
+	}
+	/**
+	 * @param heatingRatio the heatingRatio to set
+	 */
+	public void setHeatingRatio(double heatingRatio) {
+		this.heatingRatio = heatingRatio;
+	}
 	
 }
