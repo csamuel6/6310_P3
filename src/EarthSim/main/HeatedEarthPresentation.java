@@ -288,14 +288,13 @@ public class HeatedEarthPresentation extends JPanel {
 				}
 			}
 			g2d.setColor(new Color(255, 255, 0, 100));
-			Long newLong = (long) ((((float) sunsLongitude + 180) / 360) * size.width * heatingRatio);
-
-			Long newLat = (long) ((((float) sunsLatitude + 90) / 180) * size.height * heatingRatio);
+			Long newLong = (long) ((((float) sunsLongitude + 180) / 360) * size.width);
+			Long newLat = (long) ((((float) sunsLatitude + 90) / 180) * size.height);
 
 			// System.out.println(newLat + " lewlat   " + sunsLatitude);
 
-			g2d.fillOval(newLong.intValue() - 50, newLat.intValue() - 50, 100,
-					100);
+			g2d.fillOval(newLong.intValue() - 50, newLat.intValue() - 50, (int)(100 * heatingRatio),
+					(int)(100*heatingRatio));
 		}
 		if (time != null && startTime != null) {
 			Long runningTime = ((new Date()).getTime() - startTime) / 1000;
