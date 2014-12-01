@@ -98,6 +98,10 @@ public class UserQueryInterface extends JFrame {
 
 		simulationList = new javax.swing.JList(simulationListModel);
 		
+
+		
+		
+		
 		simulationList.setBounds(100, 53, 262, 119);
 		simulationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ListSelectionModel listSelectionModel = simulationList
@@ -129,7 +133,13 @@ public class UserQueryInterface extends JFrame {
 		simulationTableModel.addColumn("Time");
 
 		simulationList.setBorder(BorderFactory.createLineBorder(Color.black));
-		panel.add(simulationList);
+		
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(simulationList);
+		
+		
+		panel.add(scrollPane);
 
 		JLabel name = new JLabel("Name:");
 		// name.setBounds(10, 62, 57, 24);
