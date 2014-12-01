@@ -64,7 +64,7 @@ public class HeatedEarthSimulation implements Runnable {
 		this.tilt = tilt;
 		this.eccentricity = orbit;
 		calendar = Calendar.getInstance();
-		calendar.set(2014, Calendar.JANUARY, 4);
+		calendar.set(2014, Calendar.JANUARY, 4, 12, 0, 0);
 		startTime = calendar.getTime();
 		System.out.println("tilt " + tilt);
 
