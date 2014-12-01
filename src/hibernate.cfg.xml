@@ -12,7 +12,7 @@
 		<property name="dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
 		
 
-		<property name="show_sql">false</property>
+		<property name="show_sql">true</property>
 		
 		<mapping class = "EarthSim.persistance.SimulationStorage"/>
 		<mapping class = "EarthSim.persistance.GridCellStorage" />

@@ -94,10 +94,8 @@ public class DataManager {
 			String sql = "FROM SimulationStorage AS sim";
 			sql += " WHERE sim.eccentricity = " + queryParameters.getOrbit();
 			sql += " AND sim.axialTilt = " + queryParameters.getTilt();
-			sql += " AND sim.gridSpacing = " + queryParameters.getGridSpacing();
-			sql += " AND sim.timeStep = " + queryParameters.getTimeStep();
 			sql += " and sim.name = :simulationName";
-			sql += " ORDER BY GeoPrecision, TemporalPrecision";
+			sql += " ORDER BY GeoPrecision, TemporalPrecision, name";
 			
 			Query query = session.createQuery(sql);
 			query.setParameter("simulationName", queryParameters.name);

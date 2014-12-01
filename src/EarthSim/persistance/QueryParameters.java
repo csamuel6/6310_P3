@@ -6,9 +6,9 @@ public class QueryParameters {
 	String name = "";
 	private double orbit;
 	private double tilt = 0;
-	private int timeStep,length,gridSpacing = 0;
+	private Integer timeStep,length,gridSpacing = 0;
 	private Date startDate, endDate; 
-	private int lowerLatitude, upperLatitude, lowerLongitude, upperLongitude = 0;
+	private Integer lowerLatitude, upperLatitude, lowerLongitude, upperLongitude = 0;
 
 	
 	public int getLowerLatitude() {
@@ -98,14 +98,4 @@ public class QueryParameters {
 	public void setLength(int length) {
 		this.length = length;
 	}
-
-	public int getGridSpacing() {
-		return gridSpacing;
-	}
-
-	public void setGridSpacing(int gridSpacing) {
-		this.gridSpacing = gridSpacing;
-	}
-
-
 }

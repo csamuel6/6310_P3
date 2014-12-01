@@ -130,6 +130,7 @@ public class SimulationStorage {
 
 	@Override
 	public String toString() {
+		//+ ", Geographic Prec. = " + this.geoPrecision + ", Temporal Prec. = " + this.temporalPrecision
 		String stringRepresentation = this.name;
 		return stringRepresentation;
 	}
