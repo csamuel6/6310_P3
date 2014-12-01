@@ -59,7 +59,7 @@ public class HeatedEarthSimulation implements Runnable {
     private int geographicalPrecision = HeatedEarthGUI.getinstance().getGeographicalPrecision();
     
     public static double defaultTemp = 288;
-    
+	int iterations = 0;
     
     
 	public HeatedEarthSimulation (int gs, int interval, double orbit,
@@ -107,6 +107,7 @@ public class HeatedEarthSimulation implements Runnable {
 		Initialize();
 		running = true;
 		paused = false;
+		iterations = 0;
 	}
 
 	// Initialize GridCells.
@@ -190,6 +191,19 @@ public class HeatedEarthSimulation implements Runnable {
 	}
 
 	public void rotateEarth() {
+		
+
+		if(iterations % 100 == 0)
+		{
+			System.out.println( iterations +"," + timeInterval + " minute iterations completed so far: ");
+
+		}
+		
+		if (iterations == 300000)
+		{
+			System.exit(0);
+		}
+		iterations++;
 
 		Long beforeCalc = (new Date()).getTime();
 		long currentSunLocation = SunRepresentation.sunLocation;
@@ -216,8 +230,7 @@ public class HeatedEarthSimulation implements Runnable {
 
 		statsTimer++;
 		if (statsTimer == 140) {
-			// LOGGER.log(Level.INFO, Analyzer.getMemoryStats());
-			
+
 			System.out.println("simulation thread: " +  Analyzer.getMemoryStats());
 			Analyzer.getMemoryStats();
 			
@@ -228,6 +241,8 @@ public class HeatedEarthSimulation implements Runnable {
 
 	@Override
 	public void run() {
+		
+
 
 		running = true;
 		paused = false;
@@ -250,6 +265,7 @@ public class HeatedEarthSimulation implements Runnable {
 		double numIterationRev =  (numberNotToStore/numberToStore);    // 20   8/2  - 4
 		
 		int count = 0;
+
 		
 		while (running) {
 			while (!paused) {
@@ -263,16 +279,12 @@ public class HeatedEarthSimulation implements Runnable {
 				
 					if (count < numberOfIterations)
 					{
-		
-						
-						simulation.setGridCells(gridCells);
+								simulation.setGridCells(gridCells);
 						dataManager.storeSimulationCells();
 						count++;
 					}
 					else
 					{
-						
-						
 						count = 0;
 					}
 					
@@ -288,8 +300,7 @@ public class HeatedEarthSimulation implements Runnable {
 					else
 					{
 						simulation.setGridCells(gridCells);
-						dataManager.storeSimulationCells();
-						
+						dataManager.storeSimulationCells();	
 					
 						count = 0;
 					}
@@ -303,7 +314,15 @@ public class HeatedEarthSimulation implements Runnable {
 					presentation.update();
 				}
 			}
+			
+			
+//			System.out.print("it " + iterations);
+//			System.out.print("it mod " + iterations % 100);
+//	
+
 		}
+		
+
 	}
 	
 	public void createPercentageMaps()
