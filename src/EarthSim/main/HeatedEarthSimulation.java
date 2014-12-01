@@ -261,7 +261,7 @@ public class HeatedEarthSimulation implements Runnable {
 		int count = 0;
 
 		while (running) {
-			while (!paused && calendar.getTime().before(endDate)) {
+			while (!paused) {
 				this.rotateEarth();			
 
 				List<GridCellStorage> gridCells = createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime());
