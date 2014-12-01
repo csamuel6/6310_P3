@@ -151,7 +151,7 @@ public class DataManager {
 			simList = new ArrayList<SimulationStorage>();
 			for (Object obj : list) {
 				SimulationStorage sim = (SimulationStorage) obj;
-				sim.setGridCells(this.readGridCells(queryParameters, sim));
+				sim.setGridCells(this.getGridCellsBySimulationName(queryParameters, sim));
 				simList.add(sim);
 			}
 		}
@@ -226,6 +226,32 @@ public class DataManager {
 		}
 		return gcStorage;
 	}
+	
+	
+	private List<GridCellStorage> getGridCellsBySimulationName(
+			QueryParameters queryParameters, SimulationStorage methodSimulation) {
+		List<GridCellStorage> gcStorage = null;
+		if (queryParameters != null) {
+			gcStorage = new ArrayList<GridCellStorage>();
+			String sql = "FROM GridCellStorage GridCell where";
+
+			sql += " GridCell.storage.id = " + methodSimulation.getId();
+			sql += " AND GridCell.time = (select Max(gc.time) from GridCellStorage gc where gc.storage.id = " + methodSimulation.getId() + " )";
+			Query query = session.createQuery(sql);
+
+			List list = query.list();
+			if (list.isEmpty()) {
+				return null;
+			}
+			for (Object obj : list) {
+				GridCellStorage gridCellStorage = (GridCellStorage) obj;
+				gcStorage.add(gridCellStorage);
+			}
+		}
+		return gcStorage;
+	}
+
+	
 
 	private String createSQLStatement(List<String> filterCriteria) {
 		String returnString = "";

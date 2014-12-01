@@ -156,7 +156,7 @@ public class Demo
 		try {
 			fh = new FileHandler("HeatedEarthLogFile.log");
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-gene9rated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

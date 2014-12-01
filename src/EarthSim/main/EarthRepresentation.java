@@ -240,6 +240,13 @@ public class EarthRepresentation {
 		
 		double cellTemperature = initialTemperature;
 		
+		if(initialTemperature > -0.000001 && initialTemperature < 0.000001)
+		{
+			cellTemperature = cell.getNeighborsAverageTemp();
+		}
+		
+		
+		
 		if ( temperatureDueToSun != 0.0 )
 		{
 			cellTemperature = (cellTemperature + temperatureDueToSun); // / 2;//avg current temp with sun cause temp

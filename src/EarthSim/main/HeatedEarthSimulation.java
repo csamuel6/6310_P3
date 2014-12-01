@@ -8,18 +8,10 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
-import javax.annotation.Generated;
-import javax.persistence.*;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-
 import EarthSim.persistance.DataManager;
 import EarthSim.persistance.GridCellStorage;
-import EarthSim.persistance.QueryParameters;
 import EarthSim.persistance.SimulationStorage;
+import EarthSim.tools.Analyzer;
 
 public class HeatedEarthSimulation implements Runnable {
 	public HeatedEarthSimulation() {}
@@ -58,6 +50,8 @@ public class HeatedEarthSimulation implements Runnable {
     private int dataPrecision = HeatedEarthGUI.getinstance().getDataPrecision();
     private int geographicalPrecision = HeatedEarthGUI.getinstance().getGeographicalPrecision();
 	private Date endDate;
+    
+    public static double defaultTemp = 288;
     
     
     
@@ -176,7 +170,7 @@ public class HeatedEarthSimulation implements Runnable {
 		cell.setProportion(earthRepresentation.calcCSurfaceArea(i));
 		cell.setxCoordinate(i);
 		cell.setyCoordinate(j);
-		cell.setTemp(288);
+		cell.setTemp(defaultTemp);
 		grid[i][j] = cell;
 
 	}
@@ -215,8 +209,12 @@ public class HeatedEarthSimulation implements Runnable {
 		temp = null;
 
 		statsTimer++;
-		if (statsTimer == 1400) {
+		if (statsTimer == 140) {
 			// LOGGER.log(Level.INFO, Analyzer.getMemoryStats());
+			
+			System.out.println("simulation thread: " +  Analyzer.getMemoryStats());
+			Analyzer.getMemoryStats();
+			
 			statsTimer = 0;
 		}
 
@@ -246,8 +244,8 @@ public class HeatedEarthSimulation implements Runnable {
 		double numIterationRev =  (numberNotToStore/numberToStore);    // 20   8/2  - 4
 		
 		int count = 0;
-		while (running && calendar.getTime().before(endDate)) {
-			while (!paused) {
+		while (running) {
+			while (!paused && calendar.getTime().before(endDate)) {
 				this.rotateEarth();			
 
 				List<GridCellStorage> gridCells = createGridStorageCells(gridcellsSurface1, simulation,calendar.getTime());

@@ -115,17 +115,18 @@ public class UserQueryInterface extends JFrame {
 		List<SimulationStorage> simulationStorageList = dataManager
 				.getAllSimulations();
 
-		for (SimulationStorage s : simulationStorageList) {
+		if (simulationStorageList != null) {
+			for (SimulationStorage s : simulationStorageList) {
 
-			// System.out.println(simulationStorageList.size() + " dfdfd ");
+				// System.out.println(simulationStorageList.size() + " dfdfd ");
 
-			if (s.getName() != null && s.getName().length() > 1) {
-				// System.out.println(simulationStorageList.size() +
-				// " 1111111111111111111111111 ");
+				if (s.getName() != null && s.getName().length() > 1) {
+					// System.out.println(simulationStorageList.size() +
+					// " 1111111111111111111111111 ");
 
-				simulationListModel.addElement(s);
+					simulationListModel.addElement(s);
+				}
 			}
-
 		}
 
 		// Set up column for storing cell data
@@ -187,7 +188,7 @@ public class UserQueryInterface extends JFrame {
 					}
 					return true;
 				} catch (NumberFormatException e) {
-					//tilt.setText(null);
+					// tilt.setText(null);
 					return false;
 				}
 			}
@@ -214,7 +215,7 @@ public class UserQueryInterface extends JFrame {
 					}
 					return true;
 				} catch (NumberFormatException e) {
-					//orbit.setText(null);
+					// orbit.setText(null);
 					return false;
 				}
 			}

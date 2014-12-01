@@ -2,7 +2,11 @@ package EarthSim.main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+
+import EarthSim.tools.Analyzer;
+
 import com.mysql.jdbc.*;
+
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -184,8 +188,11 @@ public class HeatedEarthPresentation extends JPanel {
 					Thread.currentThread().sleep(displayRate);
 
 					statsTimer++;
-					if (statsTimer == 1400) {
+					if (statsTimer == 140) {
 						// LOGGER.log(Level.INFO, Analyzer.getMemoryStats());
+						
+						System.out.println("presentation thread: " +  Analyzer.getMemoryStats());
+						
 						statsTimer = 0;
 					}
 
