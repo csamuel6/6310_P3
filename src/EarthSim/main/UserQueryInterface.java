@@ -103,6 +103,7 @@ public class UserQueryInterface extends JFrame {
 		contentPane.add(panel, BorderLayout.WEST);
 
 		simulationList = new javax.swing.JList(simulationListModel);
+
 		simulationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		simulationList.setFont(new Font("Arial", 0, simulationFontSize));
 
@@ -133,6 +134,7 @@ public class UserQueryInterface extends JFrame {
 		simulationTableModel.addColumn("Temperature");
 		simulationTableModel.addColumn("Time");
 
+
 		Border lineBorder = BorderFactory.createLineBorder(Color.black);
 		Border listBorder = BorderFactory.createTitledBorder(lineBorder,
 				" Simulations ");
@@ -149,6 +151,12 @@ public class UserQueryInterface extends JFrame {
 		simulationConstraints.gridheight = 5;
 		gridBagLayout.setConstraints(simulationList, simulationConstraints);
 		panel.add(simulationList);
+
+//		JScrollPane scrollPane = new JScrollPane();
+//		scrollPane.setViewportView(simulationList);
+//		
+//		
+//		panel.add(scrollPane);
 
 		JLabel name = new JLabel("Name:");
 		// name.setBounds(10, 62, 57, 24);

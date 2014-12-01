@@ -139,7 +139,7 @@ public class Demo
      
      
     	
-     System.out.println("tmp " + temporalPrecision + "  geo" + geographicalPrecision + "  data " + dataPrecision);
+//     System.out.println("tmp " + temporalPrecision + "  geo" + geographicalPrecision + "  data " + dataPrecision);
 
      HeatedEarthGUI.createInstance(dataPrecision, geographicalPrecision, temporalPrecision, initiative, blen);
      HeatedEarthGUI gui = HeatedEarthGUI.getinstance();

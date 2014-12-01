@@ -3,15 +3,13 @@ package EarthSim.persistance;
 import java.util.Date;
 
 public class QueryParameters {
-	String name = "";
-	private double orbit;
-	private double tilt = 0;
-	private Integer timeStep,length,gridSpacing = 0;
+	private String name;
+	private Double orbit,tilt;
 	private Date startDate, endDate; 
-	private Integer lowerLatitude, upperLatitude, lowerLongitude, upperLongitude = 0;
+	private Integer lowerLatitude, upperLatitude, lowerLongitude, upperLongitude;
 
 	
-	public int getLowerLatitude() {
+	public Integer getLowerLatitude() {
 		return lowerLatitude;
 	}
 
@@ -19,7 +17,7 @@ public class QueryParameters {
 		this.lowerLatitude = latitude;
 	}
 
-	public int getUpperLatitude() {
+	public Integer getUpperLatitude() {
 		return upperLatitude;
 	}
 
@@ -27,7 +25,7 @@ public class QueryParameters {
 		this.upperLatitude = latitude;
 	}
 
-	public int getLowerLongitude() {
+	public Integer getLowerLongitude() {
 		return lowerLongitude;
 	}
 
@@ -35,7 +33,7 @@ public class QueryParameters {
 		this.lowerLongitude = longitude;
 	}
 
-	public int getUpperLongitude() {
+	public Integer getUpperLongitude() {
 		return upperLongitude;
 	}
 
@@ -67,7 +65,7 @@ public class QueryParameters {
 		this.name = name;
 	}
 
-	public double getOrbit() {
+	public Double getOrbit() {
 		return orbit;
 	}
 
@@ -75,27 +73,11 @@ public class QueryParameters {
 		this.orbit = orbit;
 	}
 
-	public double getTilt() {
+	public Double getTilt() {
 		return tilt;
 	}
 
 	public void setTilt(double tilt) {
 		this.tilt = tilt;
-	}
-
-	public int getTimeStep() {
-		return timeStep;
-	}
-
-	public void setTimeStep(int timeStep) {
-		this.timeStep = timeStep;
-	}
-
-	public int getLength() {
-		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
 	}
 }

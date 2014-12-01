@@ -28,8 +28,8 @@ CREATE TABLE IF NOT EXISTS `SimulationInfo` (
   `gridSpacing` int(11) NOT NULL,
   `timeStep` int(11) NOT NULL,
   `simulationLength` int(11) NOT NULL,
-`temporalPrecision` int(11) NOT NULL,
-`geoPrecision` int(11) NOT NULL,
+  `TemporalPrecision` int(11) NOT NULL,
+  `GeoPrecision` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

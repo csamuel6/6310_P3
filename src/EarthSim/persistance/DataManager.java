@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -92,13 +93,26 @@ public class DataManager {
 		List<SimulationStorage> simList = null;
 		if (queryParameters != null) {
 			String sql = "FROM SimulationStorage AS sim";
-			sql += " WHERE sim.eccentricity = " + queryParameters.getOrbit();
-			sql += " AND sim.axialTilt = " + queryParameters.getTilt();
-			sql += " and sim.name = :simulationName";
-			sql += " ORDER BY GeoPrecision, TemporalPrecision, name";
 			
+			List<String> sqlCriteria = new ArrayList<String>();
+			if (queryParameters.getOrbit() != null) {
+				sqlCriteria.add(" sim.eccentricity = "
+						+ queryParameters.getOrbit());
+			}
+			if (queryParameters.getTilt() != null) {
+				sqlCriteria.add(" sim.axialTilt = " + queryParameters.getTilt());
+			}
+			if (queryParameters.getName() != null) {
+				sqlCriteria.add(" sim.name = :simulationName");
+			}
+			
+			sql += this.createSQLStatement(sqlCriteria);
+			sql += " ORDER BY GeoPrecision, TemporalPrecision, name";
+
 			Query query = session.createQuery(sql);
-			query.setParameter("simulationName", queryParameters.name);
+			if (queryParameters.getName() != null) {
+				query.setParameter("simulationName", queryParameters.getName());
+			}
 			List list = query.list();
 
 			if (list.isEmpty()) {
@@ -140,21 +154,37 @@ public class DataManager {
 		if (queryParameters != null) {
 			gcStorage = new ArrayList<GridCellStorage>();
 			String sql = "FROM GridCellStorage GridCell";
-			sql += " WHERE GridCell.latitude >= "
-					+ queryParameters.getLowerLatitude()
-					+ " AND GridCell.latitude <= "
-					+ queryParameters.getUpperLatitude();
-
-			sql += " AND GridCell.longitude >= "
-					+ queryParameters.getLowerLongitude()
-					+ " AND GridCell.longitude <= "
-					+ queryParameters.getUpperLongitude();
-			sql += " AND GridCell.storage.id = " + methodSimulation.getId();
-			sql += " AND GridCell.time >= :StartDate AND GridCell.time <=:EndDate";
+			sql += " WHERE GridCell.storage.id = " + methodSimulation.getId();
+			if (queryParameters.getLowerLatitude() != null) {
+				sql += " AND GridCell.latitude >= "
+						+ queryParameters.getLowerLatitude();
+			}
+			if (queryParameters.getUpperLatitude() != null) {
+				sql += " AND GridCell.latitude <= "
+						+ queryParameters.getUpperLatitude();
+			}
+			if (queryParameters.getLowerLongitude() != null) {
+				sql += " AND GridCell.longitude >= "
+						+ queryParameters.getLowerLongitude();
+			}
+			if (queryParameters.getUpperLongitude() != null) {
+				sql += " AND GridCell.longitude <= "
+						+ queryParameters.getUpperLongitude();
+			}
+			if (queryParameters.getStartDate() != null) {
+				sql += " AND GridCell.time >= :StartDate";
+			}
+			if (queryParameters.getEndDate() != null) {
+				sql += " AND GridCell.time <= :EndDate";
+			}
 			Query query = session.createQuery(sql);
-			query.setParameter("StartDate", queryParameters.getStartDate());
-			query.setParameter("EndDate", queryParameters.getEndDate());
 
+			if (queryParameters.getStartDate() != null) {
+				query.setParameter("StartDate", queryParameters.getStartDate());
+			}
+			if (queryParameters.getEndDate() != null) {
+				query.setParameter("EndDate", queryParameters.getEndDate());
+			}
 			List list = query.list();
 			if (list.isEmpty()) {
 				return null;
@@ -165,6 +195,17 @@ public class DataManager {
 			}
 		}
 		return gcStorage;
+	}
+
+	private String createSQLStatement(List<String> filterCriteria) {
+		String returnString = "";
+		for (String string : filterCriteria) {
+			returnString += " AND " + string;
+		}
+		if (!returnString.isEmpty()) {
+			returnString = "WHERE " + returnString;
+		}
+		return returnString;
 	}
 
 	public SimulationStorage getSimulation() {
