@@ -111,6 +111,12 @@ public class HeatedEarthGUI extends JFrame {
 	
 	public static HeatedEarthGUI getinstance ()
 	{
+		
+		if (heatedEarthGUI == null)
+		{
+			heatedEarthGUI =  new HeatedEarthGUI(2, 100, 100,  "G", 25);
+		}
+		
 		return heatedEarthGUI;
 	}
 	

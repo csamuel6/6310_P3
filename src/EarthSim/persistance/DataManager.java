@@ -92,11 +92,47 @@ public class DataManager {
 		List<SimulationStorage> simList = null;
 		if (queryParameters != null) {
 			String sql = "FROM SimulationStorage AS sim";
+			
 			sql += " WHERE sim.eccentricity = " + queryParameters.getOrbit();
 			sql += " AND sim.axialTilt = " + queryParameters.getTilt();
+			
+			
 			sql += " AND sim.gridSpacing = " + queryParameters.getGridSpacing();
+			
+			
 			sql += " AND sim.timeStep = " + queryParameters.getTimeStep();
+			
 			sql += " and sim.name = :simulationName";
+			sql += " ORDER BY GeoPrecision, TemporalPrecision";
+			
+			Query query = session.createQuery(sql);
+			query.setParameter("simulationName", queryParameters.name);
+			List list = query.list();
+
+			if (list.isEmpty()) {
+				return null;
+			}
+			simList = new ArrayList<SimulationStorage>();
+			for (Object obj : list) {
+				SimulationStorage sim = (SimulationStorage) obj;
+				sim.setGridCells(this.readGridCells(queryParameters, sim));
+				simList.add(sim);
+			}
+		}
+		return simList;
+	}
+	
+	
+	
+	public List<SimulationStorage> getSimulationByName(
+			QueryParameters queryParameters) {
+		List<SimulationStorage> simList = null;
+		if (queryParameters != null) {
+			String sql = "FROM SimulationStorage AS sim";
+			
+			sql += " WHERE " ;
+			
+			sql += "  sim.name = :simulationName";
 			sql += " ORDER BY GeoPrecision, TemporalPrecision";
 			
 			Query query = session.createQuery(sql);

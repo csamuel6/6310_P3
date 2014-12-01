@@ -24,7 +24,7 @@ import EarthSim.persistance.SimulationStorage;
 public class HeatedEarthSimulation implements Runnable {
 	public HeatedEarthSimulation() {}
 
-	protected static GridCell[][] gridcellsSurface1;
+	public static GridCell[][] gridcellsSurface1;
 	protected static GridCell[][] gridcellsSurface2;
 	
 	HashMap<Integer, Integer>  numberToSkip = new HashMap<Integer, Integer>();
@@ -256,7 +256,7 @@ public class HeatedEarthSimulation implements Runnable {
 				
 					if (count < numberOfIterations)
 					{
-						System.out.println(" count less  " );
+		
 						
 						simulation.setGridCells(gridCells);
 						dataManager.storeSimulationCells();
@@ -265,7 +265,7 @@ public class HeatedEarthSimulation implements Runnable {
 					else
 					{
 						
-						System.out.println(" count more  " );
+						
 						count = 0;
 					}
 					
@@ -275,7 +275,7 @@ public class HeatedEarthSimulation implements Runnable {
 					
 					if (count < numIterationRev)
 					{
-						System.out.println(" count less  " );
+					
 						count++;
 					}
 					else
@@ -283,14 +283,10 @@ public class HeatedEarthSimulation implements Runnable {
 						simulation.setGridCells(gridCells);
 						dataManager.storeSimulationCells();
 						
-						System.out.println(" count more  " );
+					
 						count = 0;
 					}
-					
-					
-					
-					
-					
+				
 				}
 				
 				
