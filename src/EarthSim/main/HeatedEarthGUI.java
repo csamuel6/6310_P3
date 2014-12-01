@@ -362,7 +362,7 @@ public class HeatedEarthGUI extends JFrame {
 		topLabel.setFont(new Font("Arial", 0, textSize20));
 		smallGrid.add(topLabel);
 		simTimeStep.setFont(new Font("Arial", 0, textSize20));
-		simTimeStep.setText("1");
+		simTimeStep.setText("1440");
 		simTimeStep.setToolTipText("Enter an Integer between 1 and 525600.");
 		simTimeStep.setInputVerifier(new InputVerifier() {
 			@Override
