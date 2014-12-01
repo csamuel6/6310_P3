@@ -290,10 +290,41 @@ public class GridCell
 	public double getNeighborsAverageTemp()
 	{
 		
-		return (this.getNorth().getTemp() + this.getSouth().getTemp() + this.getEast().getTemp() + this.getWest().getTemp())/4.0 ;
+		double division = 4.0;
+		
+		if(isDoubleZero(this.getNorth().getTemp()))
+		{
+			division--;
+		}
+		
+		if(isDoubleZero(this.getSouth().getTemp()))
+		{
+			division--;
+		}
+		
+		if(isDoubleZero(this.getEast().getTemp()))
+		{
+			division--;
+		}
+		
+		if(isDoubleZero(this.getWest().getTemp()))
+		{
+			division--;
+		}
+		
+		if (isDoubleZero(division))
+		{
+			division =1;
+		}
+		
+		return (this.getNorth().getTemp() + this.getSouth().getTemp() + this.getEast().getTemp() + this.getWest().getTemp())/division ;
 		
 	}
     
+	boolean isDoubleZero(double v)
+	{
+		return (v > -0.000001 && v < 0.000001);
+	}
     
     
     

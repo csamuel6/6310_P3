@@ -20,6 +20,7 @@ import EarthSim.persistance.DataManager;
 import EarthSim.persistance.GridCellStorage;
 import EarthSim.persistance.QueryParameters;
 import EarthSim.persistance.SimulationStorage;
+import EarthSim.tools.Analyzer;
 
 public class HeatedEarthSimulation implements Runnable {
 	public HeatedEarthSimulation() {}
@@ -56,6 +57,8 @@ public class HeatedEarthSimulation implements Runnable {
 	SimulationStorage simulation;
     private int dataPrecision = HeatedEarthGUI.getinstance().getDataPrecision();
     private int geographicalPrecision = HeatedEarthGUI.getinstance().getGeographicalPrecision();
+    
+    public static double defaultTemp = 288;
     
     
     
@@ -173,7 +176,7 @@ public class HeatedEarthSimulation implements Runnable {
 		cell.setProportion(earthRepresentation.calcCSurfaceArea(i));
 		cell.setxCoordinate(i);
 		cell.setyCoordinate(j);
-		cell.setTemp(288);
+		cell.setTemp(defaultTemp);
 		grid[i][j] = cell;
 
 	}
@@ -212,8 +215,12 @@ public class HeatedEarthSimulation implements Runnable {
 		temp = null;
 
 		statsTimer++;
-		if (statsTimer == 1400) {
+		if (statsTimer == 140) {
 			// LOGGER.log(Level.INFO, Analyzer.getMemoryStats());
+			
+			System.out.println("simulation thread: " +  Analyzer.getMemoryStats());
+			Analyzer.getMemoryStats();
+			
 			statsTimer = 0;
 		}
 
@@ -290,7 +297,7 @@ public class HeatedEarthSimulation implements Runnable {
 				}
 				
 				
-				calendar.add(Calendar.HOUR, timeInterval);
+				calendar.add(Calendar.MINUTE, timeInterval);
 				if (presentation != null) {
 					System.out.println("Simulation update");
 					presentation.update();
