@@ -96,14 +96,14 @@ public class DataManager {
 			
 			List<String> sqlCriteria = new ArrayList<String>();
 			if (queryParameters.getOrbit() != null) {
-				sqlCriteria.add(" sim.eccentricity = "
+				sqlCriteria.add("sim.eccentricity = "
 						+ queryParameters.getOrbit());
 			}
 			if (queryParameters.getTilt() != null) {
-				sqlCriteria.add(" sim.axialTilt = " + queryParameters.getTilt());
+				sqlCriteria.add("sim.axialTilt = " + queryParameters.getTilt());
 			}
 			if (queryParameters.getName() != null) {
-				sqlCriteria.add(" sim.name = :simulationName");
+				sqlCriteria.add("sim.name = :simulationName");
 			}
 			
 			sql += this.createSQLStatement(sqlCriteria);
@@ -230,10 +230,11 @@ public class DataManager {
 	private String createSQLStatement(List<String> filterCriteria) {
 		String returnString = "";
 		for (String string : filterCriteria) {
-			returnString += " AND " + string;
+			returnString += string + " AND ";
 		}
 		if (!returnString.isEmpty()) {
-			returnString = "WHERE " + returnString;
+			returnString = returnString.substring(0, returnString.length() - 5);
+			returnString = " WHERE " + returnString;
 		}
 		return returnString;
 	}

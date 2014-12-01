@@ -33,6 +33,7 @@ public class HeatedEarthSimulation implements Runnable {
 	private BlockingQueue<Message> queue;
 	static int timeInterval = 0;
 	static int timeOfDay = 720;
+	private Date startTime;
 	private int elapsedMinutes = 0;
 	private HeatedEarthPresentation presentation = null;
 	private DataManager dataManager = new DataManager();
@@ -56,6 +57,7 @@ public class HeatedEarthSimulation implements Runnable {
 	SimulationStorage simulation;
     private int dataPrecision = HeatedEarthGUI.getinstance().getDataPrecision();
     private int geographicalPrecision = HeatedEarthGUI.getinstance().getGeographicalPrecision();
+	private Date endDate;
     
     
     
@@ -69,6 +71,7 @@ public class HeatedEarthSimulation implements Runnable {
 		this.eccentricity = orbit;
 		calendar = Calendar.getInstance();
 		calendar.set(2014, Calendar.JANUARY, 4);
+		startTime = calendar.getTime();
 		System.out.println("tilt " + tilt);
 
 		earthRepresentation = new EarthRepresentation(gs, interval, orbit, tilt, eccentricity);
@@ -243,8 +246,7 @@ public class HeatedEarthSimulation implements Runnable {
 		double numIterationRev =  (numberNotToStore/numberToStore);    // 20   8/2  - 4
 		
 		int count = 0;
-		
-		while (running) {
+		while (running && calendar.getTime().before(endDate)) {
 			while (!paused) {
 				this.rotateEarth();			
 
@@ -290,7 +292,7 @@ public class HeatedEarthSimulation implements Runnable {
 				}
 				
 				
-				calendar.add(Calendar.HOUR, timeInterval);
+				calendar.add(Calendar.MINUTE, timeInterval);
 				if (presentation != null) {
 					System.out.println("Simulation update");
 					presentation.update();
@@ -497,6 +499,9 @@ public class HeatedEarthSimulation implements Runnable {
 
 	public void setLength(int length) {
 		this.length = length;
+		calendar.add(Calendar.MONTH, this.length);
+		endDate = calendar.getTime();
+		calendar.setTime(startTime);
 	}
 
 }

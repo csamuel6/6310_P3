@@ -5,8 +5,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
-
+CREATE DATABASE `HeatedEarth`;
+USE 'HeatedEarth';
 CREATE TABLE IF NOT EXISTS `CellData` (
   `latitude` int(11) NOT NULL,
   `longitude` int(11) NOT NULL,
@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS `SimulationInfo` (
 
 
 ALTER TABLE `CellData`
-  ADD CONSTRAINT `CellData_ibfk_2` FOREIGN KEY (`SimulationInfo_id`) REFERENCES `SimulationInfo` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `CellData_ibfk_1` FOREIGN KEY (`SimulationInfo_id`) REFERENCES `SimulationInfo` (`id`) ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

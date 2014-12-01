@@ -13,7 +13,7 @@ public class QueryParameters {
 		return lowerLatitude;
 	}
 
-	public void setLowerLatitude(int latitude) {
+	public void setLowerLatitude(Integer latitude) {
 		this.lowerLatitude = latitude;
 	}
 
@@ -21,7 +21,7 @@ public class QueryParameters {
 		return upperLatitude;
 	}
 
-	public void setUpperLatitude(int latitude) {
+	public void setUpperLatitude(Integer latitude) {
 		this.upperLatitude = latitude;
 	}
 
@@ -29,7 +29,7 @@ public class QueryParameters {
 		return lowerLongitude;
 	}
 
-	public void setLowerLongitude(int longitude) {
+	public void setLowerLongitude(Integer longitude) {
 		this.lowerLongitude = longitude;
 	}
 
@@ -37,7 +37,7 @@ public class QueryParameters {
 		return upperLongitude;
 	}
 
-	public void setUpperLongitude(int longitude) {
+	public void setUpperLongitude(Integer longitude) {
 		this.upperLongitude = longitude;
 	}
 
@@ -69,7 +69,7 @@ public class QueryParameters {
 		return orbit;
 	}
 
-	public void setOrbit(double orbit) {
+	public void setOrbit(Double orbit) {
 		this.orbit = orbit;
 	}
 
@@ -77,7 +77,7 @@ public class QueryParameters {
 		return tilt;
 	}
 
-	public void setTilt(double tilt) {
+	public void setTilt(Double tilt) {
 		this.tilt = tilt;
 	}
 }

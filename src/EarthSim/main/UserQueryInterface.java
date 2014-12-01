@@ -56,12 +56,12 @@ public class UserQueryInterface extends JFrame {
 	int simulationFontSize = 12;
 	int textSize20 = 15;
 	JTextField tilt = new JTextField();
-	double tiltValue;
-	double OrbitValue;
-	int lowerLatitudeValue;
-	int upperLatitudeValue;
-	int lowerLongitudeValue;
-	int upperLongitudeValue;
+	Double tiltValue;
+	Double OrbitValue;
+	Integer lowerLatitudeValue;
+	Integer upperLatitudeValue;
+	Integer lowerLongitudeValue;
+	Integer upperLongitudeValue;
 	JTextField orbit = new JTextField();
 	private JTextField startTime = new JTextField();
 	private JTextField endTime = new JTextField();
@@ -134,7 +134,6 @@ public class UserQueryInterface extends JFrame {
 		simulationTableModel.addColumn("Temperature");
 		simulationTableModel.addColumn("Time");
 
-
 		Border lineBorder = BorderFactory.createLineBorder(Color.black);
 		Border listBorder = BorderFactory.createTitledBorder(lineBorder,
 				" Simulations ");
@@ -152,11 +151,11 @@ public class UserQueryInterface extends JFrame {
 		gridBagLayout.setConstraints(simulationList, simulationConstraints);
 		panel.add(simulationList);
 
-//		JScrollPane scrollPane = new JScrollPane();
-//		scrollPane.setViewportView(simulationList);
-//		
-//		
-//		panel.add(scrollPane);
+		// JScrollPane scrollPane = new JScrollPane();
+		// scrollPane.setViewportView(simulationList);
+		//
+		//
+		// panel.add(scrollPane);
 
 		JLabel name = new JLabel("Name:");
 		// name.setBounds(10, 62, 57, 24);
@@ -188,7 +187,7 @@ public class UserQueryInterface extends JFrame {
 					}
 					return true;
 				} catch (NumberFormatException e) {
-					tilt.setText("");
+					//tilt.setText(null);
 					return false;
 				}
 			}
@@ -215,7 +214,7 @@ public class UserQueryInterface extends JFrame {
 					}
 					return true;
 				} catch (NumberFormatException e) {
-					orbit.setText("");
+					//orbit.setText(null);
 					return false;
 				}
 			}
@@ -424,8 +423,11 @@ public class UserQueryInterface extends JFrame {
 				simulationTableModel.removeRow(rowIndex);
 			}
 			int selectedIndex = simulationList.getSelectedIndex();
-			SimulationStorage selectedSimulationStorage = (SimulationStorage) simulationListModel
-					.get(selectedIndex);
+			SimulationStorage selectedSimulationStorage = null;
+			if (selectedIndex > -1) {
+				selectedSimulationStorage = (SimulationStorage) simulationListModel
+						.get(selectedIndex);
+			}
 			// Load new rows
 			if (selectedSimulationStorage != null) {
 				for (GridCellStorage gridCell : selectedSimulationStorage
