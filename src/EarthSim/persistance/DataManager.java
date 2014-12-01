@@ -107,7 +107,7 @@ public class DataManager {
 			}
 			
 			sql += this.createSQLStatement(sqlCriteria);
-			sql += " ORDER BY GeoPrecision, TemporalPrecision, name";
+			sql += " ORDER BY GeoPrecision, TemporalPrecision DESC";
 
 			Query query = session.createQuery(sql);
 			if (queryParameters.getName() != null) {
@@ -139,7 +139,7 @@ public class DataManager {
 			sql += " WHERE " ;
 			
 			sql += "  sim.name = :simulationName";
-			sql += " ORDER BY GeoPrecision, TemporalPrecision";
+			sql += " ORDER BY GeoPrecision, TemporalPrecision DESC";
 			
 			Query query = session.createQuery(sql);
 			query.setParameter("simulationName", queryParameters.getName());
