@@ -10,11 +10,7 @@ This program simulates temperature of the planet Earth as it is heated by the Su
 Installation, Compilation, and Execution of the HeatedEarth Simulator:
 ===============
 
-1.	 Open the tarball in a directory of your choosing.
-2.	Using phpAdmin, import the HeatedEarth.sql file from the extracted folder and press Go. (This will create the necessary database schema.)
-3.	cd into the folder that holds the source code
-4.	cd into the src folder
-5.	Run the following command from the terminal: javac -d bin/src/EarthSim/*.java
-6.	Then run this command: java -classpath ".;*;*.jar" EarthSim.main.Demo -p 2 -t 100 -g 100  
-
-
+1. Open the tarball in a directory of your choosing.
+2. Using phpAdmin, import the HeatedEarth.sql file from the extracted folder and press Go. (This will create the necessary database schema.)
+3. Go into the bin folder and execute the command:  java -cp "./:*.jar:*" EarthSim.main.Demo -g (Geographic Precision digits) -p (Data Precision percentage) -t (Temporal Precision percentage)
+Example command:  java -cp "./:*.jar:*" EarthSim.main.Demo -p 2 -t 100 -g 100
