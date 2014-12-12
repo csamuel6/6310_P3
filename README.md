@@ -13,4 +13,7 @@ Installation, Compilation, and Execution of the HeatedEarth Simulator:
 1. Open the tarball in a directory of your choosing.
 2. Using phpAdmin, import the HeatedEarth.sql file from the extracted folder and press Go. (This will create the necessary database schema.)
 3. Go into the bin folder and execute the command:  java -cp "./:*.jar:*" EarthSim.main.Demo -g (Geographic Precision digits) -p (Data Precision percentage) -t (Temporal Precision percentage)
-Example command:  java -cp "./:*.jar:*" EarthSim.main.Demo -p 2 -t 100 -g 100
+
+Example command (linux):  java -cp "./:*.jar:*" EarthSim.main.Demo -p 2 -t 100 -g 100
+
+Example command (windows): java -classpath "./;*;*.jar" EarthSim.main.Demo -p 2 -t 100 -g 100
