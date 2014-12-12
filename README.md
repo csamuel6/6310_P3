@@ -15,5 +15,6 @@ Installation, Compilation, and Execution of the HeatedEarth Simulator:
 3.	cd into the folder that holds the source code
 4.	cd into the src folder
 5.	Run the following command from the terminal: javac -d bin/src/EarthSim/*.java
-6.	Then run this command: java -cp ./bin EarthSim.Demo -g -p -t 
+6.	Then run this command: java -classpath ".;*;*.jar" EarthSim.main.Demo -p 2 -t 100 -g 100  
+
 
